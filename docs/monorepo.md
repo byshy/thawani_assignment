@@ -26,7 +26,7 @@ thawani_assignment/
 └── README.md
 ```
 
-Leaf SDK packages exist (`needle`, `thawani_models`, `networking`, `local_storage`). Still planned: `thawani_ui`, `thawani`, and `apps/explorer`.
+All SDK packages except `thawani` exist. Still planned: `thawani` and `apps/explorer`.
 
 ## Package responsibilities
 
@@ -76,9 +76,10 @@ In a multi-app Thawani setup, this package would grow with wallets, transfers, b
 
 ### `sdk/thawani_ui`
 
-- Theme tokens (colors, typography, spacing) suitable for a clean, readable assignment UI — not visual polish for its own sake.
-- Reusable widgets: list row shell, empty state, error state with retry, offline banner, favourite icon button, loading indicators.
-- Debounce helper may live here or in `thawani` utilities; prefer one place and document it.
+- Theme tokens and `ThawaniTheme.light()` — readable assignment UI, not decoration.
+- Widgets: `CharacterListTile`, `FavouriteButton`, `EmptyState` / `EmptyState.forQuery`, `ErrorState` (+ retry), `OfflineBanner`, `LoadingIndicator`, `ListLoadingFooter`.
+- Shared `Debouncer` for search (300–500 ms).
+- Presentation-only: no Dio/Hive; no `thawani_models` dependency — widgets take strings and callbacks so the app maps entities at the boundary.
 
 Keeps Explorer screens thin and gives a future Thawani app the same empty/error/offline language.
 
@@ -138,8 +139,7 @@ thawani
 
 needle              → get_it only
 
-thawani_ui
-    └── thawani_models      (optional; only if widgets need entity types)
+thawani_ui          → (Flutter only; no models/networking/storage)
 
 networking          → (Flutter/Dart + Dio + internet_connection_checker_plus)
 local_storage       → (Flutter/Dart + hive_ce / hive_ce_flutter)
