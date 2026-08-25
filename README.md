@@ -4,7 +4,7 @@ Thawani Flutter take-home: the **Explorer** app — a Rick and Morty character b
 
 This repo is a **multi-package monorepo**: runnable apps live under `apps/`, shared libraries under `sdk/`. Networking, storage, models, and UI live in the SDK; product apps stay thin shells that compose those packages. Another app can depend on `sdk/` instead of copying layers.
 
-> **Status:** documentation and structural decisions first. Implementation follows this plan.
+> **Status:** `sdk/needle` exists. Remaining SDK packages and Explorer are still to be scaffolded.
 
 ---
 
@@ -98,7 +98,7 @@ Full detail: [docs/architecture.md](docs/architecture.md).
 
 *To be updated honestly before submission.*
 
-- Implementation not started; this commit set is documentation-first.
+- Implementation started: `sdk/needle` only. Remaining SDK packages and Explorer are not scaffolded yet.
 - Bonus episodes feature: design documented in [docs/episode-fanout.md](docs/episode-fanout.md); implementation optional.
 
 ---

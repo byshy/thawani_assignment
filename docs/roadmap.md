@@ -1,6 +1,6 @@
 # Implementation roadmap
 
-Ordered plan for when coding begins. Documentation in this folder is the source of truth until code exists.
+Ordered implementation plan. Documentation in this folder stays the source of truth for packages that do not exist yet.
 
 ## Phase 0 — Docs (done)
 
@@ -11,7 +11,7 @@ Ordered plan for when coding begins. Documentation in this folder is the source 
 
 ## Phase 1 — Scaffold
 
-1. Create Flutter packages under `sdk/` (`thawani_models`, `networking`, `local_storage`, `thawani_ui`, `thawani`, `needle`).  
+1. Create Flutter packages under `sdk/`: `needle` done; remaining: `thawani_models`, `networking`, `local_storage`, `thawani_ui`, `thawani`.  
 2. Create `apps/explorer` Flutter app with path dependencies.  
 3. Wire flavors: Development, Production (entrypoints, Android product flavors, iOS schemes).  
 4. Add `apps/explorer/lib/di/` — `injection_container.dart` + split injectors (`get_it` via `needle`).  

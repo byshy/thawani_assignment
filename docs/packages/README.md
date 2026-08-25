@@ -2,6 +2,8 @@
 
 These READMEs describe packages **before** they are scaffolded. When each package is created, move/adapt this content into that package’s own `README.md`.
 
+Scaffolded: [`sdk/needle`](../../sdk/needle/README.md).
+
 ## `apps/explorer`
 
 Flutter application implementing the Rick and Morty Explorer assignment. Composition root: Provider wiring, use cases navigation (list / detail / favourites), flavors, and screen UI. Depends on `thawani`, `thawani_ui`, and `thawani_models`.
@@ -17,10 +19,6 @@ Shared entities, API DTOs, and explicit mappers. No HTTP or Hive. Consumed by do
 ## `sdk/thawani_ui`
 
 Design tokens and reusable widgets: list row chrome, empty/error states, offline banner, favourite control, loading indicators. Presentation-only.
-
-## `sdk/needle`
-
-Re-exports **get_it**. Shared import for `GetIt` / `sl` across app and SDK packages. Registration stays in `apps/explorer/lib/di/`.
 
 ## `sdk/networking`
 

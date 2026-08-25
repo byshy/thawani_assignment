@@ -8,8 +8,9 @@ Repositories, data sources, use cases, and Providers need to be wired without co
 
 Use **get_it** for dependency injection, exposed through a thin `sdk/needle` package that re-exports `get_it` (same pattern as the existing Thawani mobile codebase).
 
+- `sdk/needle` re-exports get_it and exposes `final GetIt sl = GetIt.instance`.
 - `apps/explorer/lib/di/` owns registration:
-  - `injection_container.dart` — `final GetIt sl = GetIt.instance;` and `initSL()`
+  - `injection_container.dart` — `initSL()`
   - Split injectors: external (HTTP, storage), datasource, repository, use case, provider
 - `main_dev.dart` / `main_prod.dart` call `await initSL()` before `runApp`.
 - Use cases resolve repositories via `sl<CharacterRepository>()`.
