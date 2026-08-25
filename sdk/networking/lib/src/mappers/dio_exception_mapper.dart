@@ -27,12 +27,18 @@ Map<String, dynamic> requireJsonMap(dynamic data) {
   if (data is Map<String, dynamic>) {
     return data;
   }
+  if (data is Map) {
+    return Map<String, dynamic>.from(data);
+  }
   throw const ParseFailure(message: 'Expected a JSON object');
 }
 
 List<dynamic> requireJsonList(dynamic data) {
   if (data is List<dynamic>) {
     return data;
+  }
+  if (data is List) {
+    return List<dynamic>.from(data);
   }
   throw const ParseFailure(message: 'Expected a JSON array');
 }

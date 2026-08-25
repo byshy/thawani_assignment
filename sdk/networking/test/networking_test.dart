@@ -22,6 +22,11 @@ void main() {
     test('requireJsonMap accepts a JSON object', () {
       expect(requireJsonMap({'id': 1}), {'id': 1});
     });
+
+    test('requireJsonMap accepts Map with dynamic keys from Dio', () {
+      final dynamic payload = <dynamic, dynamic>{'id': 1, 'name': 'Rick'};
+      expect(requireJsonMap(payload), {'id': 1, 'name': 'Rick'});
+    });
   });
 
   group('failure path', () {
