@@ -53,7 +53,7 @@ The repo is also split into `apps/` and `sdk/` packages so shared networking, st
 
 ### Data (implementations)
 
-- **Remote:** Rick and Morty REST via `networking` (HTTP client wrapper, status handling, connectivity). Hand-written DTOs — no GraphQL, no API code generation.
+- **Remote:** Rick and Morty REST via `networking` (`ApiClient` with app-supplied `baseUrl`, typed failures, real reachability checks). Hand-written DTOs — no GraphQL, no API code generation.
 - **Local:** list/detail cache + favourites via `local_storage` (Hive planned).
 - **Mappers:** `CharacterDto` → `Character` (and reverse only if needed for cache).
 - **Repository:** chooses network vs cache, writes cache on success, exposes a single API to use cases.
@@ -110,7 +110,7 @@ Registration lives in `apps/explorer/lib/di/`. Boot order:
 ```text
 initSL()
   → local_storage / Hive
-  → networking (Dio, connectivity)
+  → networking (ApiClient + ConnectivityChecker)
   → data sources
   → repositories
   → use cases
