@@ -12,10 +12,10 @@ Ordered implementation plan. Documentation in this folder stays the source of tr
 ## Phase 1 — Scaffold
 
 1. Create Flutter packages under `sdk/` — done (all six packages).  
-2. Create `apps/explorer` Flutter app with path dependencies.  
-3. Wire flavors: Development, Production (entrypoints, Android product flavors, iOS schemes).  
-4. Add `apps/explorer/lib/di/` — `injection_container.dart` + split injectors (`get_it` via `needle`).  
-5. Shared analysis options if useful; ensure `flutter analyze` is runnable per package.  
+2. Create `apps/explorer` Flutter app with path dependencies — done.  
+3. Wire flavors: Development, Production (single `main.dart`, Android product flavors, iOS schemes) — done.  
+4. Add `apps/explorer/lib/di/` — `injection_container.dart` + split injectors (`get_it` via `needle`) — done (use-case / provider injectors stay empty until Phase 3).  
+5. Shared analysis options if useful; ensure `flutter analyze` is runnable per package — done (`flutter_lints` per package).  
 6. Initial incremental git commits (scaffold ≠ one giant dump).
 
 ## Phase 2 — Data foundation

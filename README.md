@@ -4,7 +4,7 @@ Thawani Flutter take-home: the **Explorer** app — a Rick and Morty character b
 
 This repo is a **multi-package monorepo**: runnable apps live under `apps/`, shared libraries under `sdk/`. Networking, storage, models, and UI live in the SDK; product apps stay thin shells that compose those packages. Another app can depend on `sdk/` instead of copying layers.
 
-> **Status:** All `sdk/` packages exist. Remaining: `apps/explorer` (scaffold + features).
+> **Status:** SDK packages and Explorer flavors/DI exist. Remaining: Explorer screens (Phase 3).
 
 ---
 
@@ -13,7 +13,7 @@ This repo is a **multi-package monorepo**: runnable apps live under `apps/`, sha
 ```text
 thawani_assignment/
 ├── apps/
-│   └── explorer/          # Assignment Flutter app (to be created)
+│   └── explorer/          # Assignment Flutter app
 ├── sdk/
 │   ├── thawani/           # Domain / product package (repos, features)
 │   ├── thawani_models/    # Shared models, DTOs, mappers
@@ -46,15 +46,11 @@ See [docs/monorepo.md](docs/monorepo.md) for package responsibilities and depend
 
 ## How to run
 
-*To be filled once the Flutter project is scaffolded.*
-
-Expected (draft):
-
 ```bash
-# From apps/explorer after packages exist
+# From apps/explorer
 flutter pub get
-flutter run --flavor dev -t lib/main_dev.dart
-# also: prod entrypoint
+flutter run --flavor dev
+flutter run --flavor prod
 ```
 
 - **Flutter version:** TBD at scaffold time (pinned in docs and CI notes).
