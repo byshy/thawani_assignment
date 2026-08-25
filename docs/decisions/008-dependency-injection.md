@@ -12,7 +12,7 @@ Use **get_it** for dependency injection, exposed through a thin `sdk/needle` pac
 - `apps/explorer/lib/di/` owns registration:
   - `injection_container.dart` — `initSL()`
   - Split injectors: external (HTTP, storage), datasource, repository, use case, provider
-- `main_dev.dart` / `main_prod.dart` call `await initSL()` before `runApp`.
+- `lib/main.dart` calls `await initSL()` before `runApp`. Flavor is resolved from `--dart-define=flavor=` (preferred) or `--flavor`.
 - Use cases resolve repositories via `sl<CharacterRepository>()`.
 - Providers resolve use cases via `sl<GetCharactersPageUseCase>()` (or receive them in the constructor at registration time).
 - SDK packages define types and implementations; they do not register themselves — the app composition root does.

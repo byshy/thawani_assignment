@@ -244,7 +244,7 @@ packages:
     source: hosted
     version: "6.1.0"
   local_storage:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: "../../sdk/local_storage"
       relative: true
@@ -298,7 +298,7 @@ packages:
     source: path
     version: "0.0.1"
   networking:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: "../../sdk/networking"
       relative: true

@@ -13,7 +13,7 @@ Explorer ships with two flavors:
 | Development | Day-to-day local runs |
 | Production | Release-shaped build |
 
-Each flavor has its own entrypoint / config (app display name suffix, application id / bundle id where applicable, environment label). For this assignment both flavors may share the same Rick and Morty base URL; the flavor machinery is still in place.
+Each flavor has its own config (app display name suffix, application id / bundle id where applicable, environment label). A single `lib/main.dart` resolves the flavor from `--dart-define=flavor=` (preferred) or `--flavor`. For this assignment both flavors may share the same Rick and Morty base URL; the flavor machinery is still in place.
 
 No API keys, tokens, or other secrets are committed. Config that must differ later can use non-secret values or local untracked files.
 

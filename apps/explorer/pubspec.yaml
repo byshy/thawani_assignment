@@ -9,8 +9,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  local_storage:
+    path: ../../sdk/local_storage
   needle:
     path: ../../sdk/needle
+  networking:
+    path: ../../sdk/networking
   thawani:
     path: ../../sdk/thawani
   thawani_models:

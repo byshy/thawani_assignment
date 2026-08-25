@@ -43,7 +43,7 @@ The repo is also split into `apps/` and `sdk/` packages so shared networking, st
 - Providers call use cases, not repositories or data sources.
 - Composes widgets from `thawani_ui` where shared; keeps screen-specific UI local.
 - Knows **nothing** about Dio, Hive, or JSON parsing.
-- **Flavors:** Development and Production (entrypoints / `--flavor`, env-specific config such as base URL labels, app name suffix, bundle id). No secrets in the repo.
+- **Flavors:** Development and Production (`--flavor`, env-specific config such as base URL labels, app name suffix, bundle id). One `lib/main.dart`; flavor is resolved at runtime. No secrets in the repo.
 
 ### Domain contracts (`sdk/thawani` + `thawani_models`)
 
@@ -99,7 +99,7 @@ UI states: loading | data | empty(query) | error(retry)
 | `dev` / Development | Local development; distinct app id / name suffix |
 | `prod` / Production | Release-shaped build |
 
-All flavors can point at the same public Rick and Morty API for this assignment; the important part is the **environment wiring** (entry points, Android product flavors, iOS schemes, config object). No API keys or secrets are committed.
+All flavors can point at the same public Rick and Morty API for this assignment; the important part is the **environment wiring** (one `main.dart`, Android product flavors, iOS schemes, config object). No API keys or secrets are committed.
 
 See [decisions/007-flavors.md](decisions/007-flavors.md).
 
