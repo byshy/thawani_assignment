@@ -26,7 +26,7 @@ thawani_assignment/
 └── README.md
 ```
 
-Package folders under `sdk/` and the app under `apps/` are **planned**; they will be created at scaffold time. Empty `apps/` and `sdk/` directories already reserve the boundary.
+`sdk/needle` exists. Other SDK packages and `apps/explorer` are still planned.
 
 ## Package responsibilities
 
@@ -45,7 +45,7 @@ The app is the **composition root**: `initSL()` registers dependencies, hosts na
 
 ```text
 di/
-  injection_container.dart   # GetIt sl + initSL()
+  injection_container.dart   # initSL(); sl lives in needle
   external_injector.dart     # Dio, Hive / local_storage init
   datasource_injector.dart   # remote + local data sources
   repository_injector.dart   # CharacterRepository, FavouritesRepository
@@ -98,15 +98,15 @@ No feature-specific character endpoints here — those stay in `thawani`.
 
 ### `sdk/needle`
 
-Thin wrapper around **get_it**. Re-exports `GetIt` so app and SDK packages share one import style:
+Thin wrapper around **get_it**. Re-exports `GetIt` and exposes `sl` (`GetIt.instance`) so app and SDK packages share one import:
 
 ```dart
 import 'package:needle/needle.dart';
 
-final GetIt sl = GetIt.instance;
+final foo = sl<Foo>();
 ```
 
-No registration logic lives here — only the shared dependency.
+No registration logic lives here — `initSL()` stays in `apps/explorer/lib/di/`.
 
 ## Dependency rules
 

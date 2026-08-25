@@ -9,6 +9,6 @@ Shared Flutter/Dart packages consumed by apps.
 | `thawani_ui/` | Design system & shared widgets |
 | `networking/` | HTTP, connectivity, remote failures |
 | `local_storage/` | Local persistence (Hive) |
-| `needle/` | get_it re-export for DI |
+| `needle/` | get_it re-export for DI — **scaffolded** |
 
-Packages are planned; scaffold happens in the implementation phase. Dependency rules: [../docs/monorepo.md](../docs/monorepo.md).
+`needle` exists. Remaining packages are still planned. Dependency rules: [../docs/monorepo.md](../docs/monorepo.md).
