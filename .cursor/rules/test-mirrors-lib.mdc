@@ -1,0 +1,32 @@
+---
+description: Mirror lib/ folder structure under test/; do not flatten tests at the package root
+alwaysApply: true
+---
+
+# Test folders mirror lib
+
+Every Dart/Flutter package and app in this repo should place tests under `test/` using the same relative path as the file under `lib/`. Follow `sdk/thawani_ui` as the reference.
+
+## Mapping
+
+`lib/<path>/<name>.dart` → `test/<path>/<name>_test.dart`
+
+```
+# ✅ GOOD (thawani_ui)
+lib/src/widgets/empty_state.dart  →  test/src/widgets/empty_state_test.dart
+lib/src/theme/thawani_theme.dart   →  test/src/theme/thawani_theme_test.dart
+lib/src/utils/debouncer.dart       →  test/src/utils/debouncer_test.dart
+
+# ❌ BAD — flattened at test/
+lib/src/widgets/empty_state.dart  →  test/empty_state_test.dart
+lib/src/mappers/character_mapper.dart → test/character_mapper_test.dart
+```
+
+When adding a source file, create or update its test in the mirrored path. When moving or renaming a `lib/` file, move the matching `*_test.dart` with it.
+
+## Do not
+
+- Dump tests into `test/` root when the source lives under `lib/src/...`
+- Invent a different folder tree for tests (`test/unit/`, `test/widgets/`, etc.) unless it already exists under `lib/`
+- Add tests for barrel files (`lib/<package>.dart`) that only re-export
+- Skip the `_test.dart` suffix
