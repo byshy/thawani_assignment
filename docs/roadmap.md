@@ -11,7 +11,7 @@ Ordered implementation plan. Documentation in this folder stays the source of tr
 
 ## Phase 1 — Scaffold
 
-1. Create Flutter packages under `sdk/`: leaf packages done (`needle`, `thawani_models`, `networking`, `local_storage`); remaining: `thawani_ui`, `thawani`.  
+1. Create Flutter packages under `sdk/`: all done except `thawani` (remaining: `thawani`).  
 2. Create `apps/explorer` Flutter app with path dependencies.  
 3. Wire flavors: Development, Production (entrypoints, Android product flavors, iOS schemes).  
 4. Add `apps/explorer/lib/di/` — `injection_container.dart` + split injectors (`get_it` via `needle`).  
