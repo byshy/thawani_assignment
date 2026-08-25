@@ -1,0 +1,37 @@
+---
+description: Always start work on a new git branch; never commit directly to main
+alwaysApply: true
+---
+
+# New branch for every change
+
+Do not implement, commit, or push on `main`. Create a dedicated branch first for features, bug fixes, chores, docs, and refactors.
+
+## Before starting work
+
+1. Check `git status` and the current branch.
+2. If on `main` (or another shared default), create and switch to a new branch.
+3. Name the branch after the work, not a generic dump.
+
+```bash
+git checkout main
+git pull
+git checkout -b feature/scaffold-sdk-packages
+```
+
+## Naming
+
+| Kind | Prefix | Example |
+|------|--------|---------|
+| Feature | `feature/` | `feature/explorer-list-screen` |
+| Bug fix | `fix/` | `fix/search-debounce-stale-response` |
+| Chore / scaffold | `chore/` | `chore/scaffold-needle-package` |
+| Docs | `docs/` | `docs/readme-run-instructions` |
+
+Keep names lowercase, hyphenated, and specific.
+
+## Do not
+
+- Commit or amend on `main`
+- Reuse an unrelated existing branch for new work
+- Combine unrelated features on one branch

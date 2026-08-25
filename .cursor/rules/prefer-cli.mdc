@@ -1,0 +1,38 @@
+---
+description: Prefer official CLI commands over hand-writing scaffolded project files
+alwaysApply: true
+---
+
+# Prefer CLI for scaffolding
+
+Use official CLI commands whenever they exist. Do not hand-write generated project trees, `pubspec.yaml` skeletons, platform folders, or plugin/package boilerplate.
+
+## Flutter / Dart in this repo
+
+Create packages, plugins, and apps with `flutter create` (or `dart create` when Flutter is not required). Run commands from the correct parent directory.
+
+```bash
+# SDK Dart/Flutter package (e.g. thawani_models, networking)
+cd sdk
+flutter create --template=package <package_name>
+
+# SDK plugin (only if a native plugin is actually needed)
+cd sdk
+flutter create --template=plugin <plugin_name>
+
+# Explorer app
+cd apps
+flutter create explorer
+```
+
+After CLI scaffold, only then edit generated files (path dependencies, flavors, DI, analysis options).
+
+## Other CLIs
+
+Same rule outside Flutter: `git`, `dart`, `flutter pub`, `melos`, and similar tools beat recreating their output by hand.
+
+## Do not
+
+- Copy-paste a `lib/`, `android/`, `ios/`, or `test/` tree into a new package/app
+- Invent `pubspec.yaml` from memory when `flutter create` would produce it
+- Skip CLI flags that the task needs (`--template`, `--platforms`, `--org`, etc.)
