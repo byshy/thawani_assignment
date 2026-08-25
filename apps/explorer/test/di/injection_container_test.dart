@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:explorer/config/flavor_config.dart';
+import 'package:explorer/core/state/network_provider.dart';
 import 'package:explorer/di/injection_container.dart';
 import 'package:explorer/features/favourites/state/favourites_provider.dart';
 import 'package:explorer/use_cases/get_characters_page_use_case.dart';
@@ -38,6 +39,7 @@ void main() {
     expect(sl<FavouritesRepository>(), isA<FavouritesRepositoryImpl>());
     expect(sl.isRegistered<ConnectivityChecker>(), isTrue);
     expect(sl.isRegistered<GetCharactersPageUseCase>(), isTrue);
+    expect(sl.isRegistered<NetworkProvider>(), isTrue);
     expect(sl.isRegistered<FavouritesProvider>(), isTrue);
   });
 }

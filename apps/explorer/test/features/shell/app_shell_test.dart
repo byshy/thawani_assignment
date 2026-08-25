@@ -14,10 +14,13 @@ import '../../support/fakes.dart';
 
 void main() {
   testWidgets('switches between list and favourites tabs', (tester) async {
+    final network = FakeNetwork();
+    addTearDown(network.dispose);
     await tester.pumpWidget(
       MultiProvider(
         providers: [
           Provider.value(value: FlavorConfig.dev()),
+          ChangeNotifierProvider.value(value: network.provider),
           ChangeNotifierProvider(
             create: (_) => FavouritesProvider(
               getFavourites: GetFavouritesUseCase(FakeFavouritesRepository()),

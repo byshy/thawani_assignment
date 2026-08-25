@@ -5,22 +5,27 @@ import 'package:thawani_models/thawani_models.dart';
 import 'package:thawani_ui/thawani_ui.dart';
 
 import '../../../core/failure_message.dart';
+import '../../../core/state/network_provider.dart';
+import '../../../core/state/network_state.dart';
 import '../../../use_cases/get_characters_page_use_case.dart';
 import 'characters_list_state.dart';
 
 class CharactersListProvider extends ChangeNotifier {
   CharactersListProvider({
     required GetCharactersPageUseCase getPage,
-    Stream<bool>? connectivity,
+    NetworkProvider? network,
     Debouncer? searchDebouncer,
   }) : _getPage = getPage,
-       _debouncer = searchDebouncer ?? Debouncer() {
-    _connectivitySub = connectivity?.listen(_onConnectivity);
+       _network = network,
+       _debouncer = searchDebouncer ?? Debouncer(),
+       _lastNetworkStatus = network?.state.status ?? NetworkStatus.unknown {
+    _network?.addListener(_onNetworkChanged);
   }
 
   final GetCharactersPageUseCase _getPage;
+  final NetworkProvider? _network;
   final Debouncer _debouncer;
-  StreamSubscription<bool>? _connectivitySub;
+  NetworkStatus _lastNetworkStatus;
 
   CharactersListState _state = const CharactersListState();
   CharactersListState get state => _state;
@@ -163,16 +168,22 @@ class CharactersListProvider extends ChangeNotifier {
     }
   }
 
-  void _onConnectivity(bool online) {
-    if (online && _state.fromCache) {
+  void _onNetworkChanged() {
+    final status = _network!.state.status;
+    if (status == NetworkStatus.online &&
+        _lastNetworkStatus == NetworkStatus.offline &&
+        _state.fromCache) {
       unawaited(refresh(clear: false));
+    }
+    if (status != NetworkStatus.unknown) {
+      _lastNetworkStatus = status;
     }
   }
 
   @override
   void dispose() {
+    _network?.removeListener(_onNetworkChanged);
     _debouncer.dispose();
-    _connectivitySub?.cancel();
     super.dispose();
   }
 }

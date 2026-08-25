@@ -1,10 +1,32 @@
 import 'dart:async';
 
+import 'package:explorer/core/state/network_provider.dart';
+import 'package:explorer/core/state/network_state.dart';
 import 'package:networking/networking.dart';
 import 'package:thawani/thawani.dart';
 import 'package:thawani_models/thawani_models.dart';
 
 import 'test_characters.dart';
+
+class FakeNetwork {
+  FakeNetwork({bool online = true})
+    : controller = StreamController<bool>.broadcast(sync: true) {
+    provider = NetworkProvider(
+      onStatusChanged: controller.stream,
+      initialStatus: online ? NetworkStatus.online : NetworkStatus.offline,
+    );
+  }
+
+  final StreamController<bool> controller;
+  late final NetworkProvider provider;
+
+  void emit(bool online) => controller.add(online);
+
+  Future<void> dispose() async {
+    provider.dispose();
+    await controller.close();
+  }
+}
 
 class FakeCharacterRepository implements CharacterRepository {
   final pageCalls = <({String query, int page})>[];

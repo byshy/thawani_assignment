@@ -130,4 +130,49 @@ void main() {
       expect(provider.state.loadingMore, isFalse);
     },
   );
+
+  test('refreshes cached data when connectivity returns', () async {
+    final network = FakeNetwork();
+    final repo = FakeCharacterRepository()
+      ..onGetPage = (query, page) async {
+        return testPageResult(fromCache: true);
+      };
+    final list = CharactersListProvider(
+      getPage: GetCharactersPageUseCase(repo),
+      network: network.provider,
+      searchDebouncer: Debouncer(delay: Duration.zero),
+    );
+
+    await list.refresh();
+    expect(repo.pageCalls, hasLength(1));
+
+    network.emit(false);
+    network.emit(true);
+    await Future<void>.delayed(Duration.zero);
+
+    expect(repo.pageCalls, hasLength(2));
+    list.dispose();
+    await network.dispose();
+  });
+
+  test('does not refresh fresh data when connectivity returns', () async {
+    final network = FakeNetwork();
+    final repo = FakeCharacterRepository();
+    final list = CharactersListProvider(
+      getPage: GetCharactersPageUseCase(repo),
+      network: network.provider,
+      searchDebouncer: Debouncer(delay: Duration.zero),
+    );
+
+    await list.refresh();
+    expect(repo.pageCalls, hasLength(1));
+
+    network.emit(false);
+    network.emit(true);
+    await Future<void>.delayed(Duration.zero);
+
+    expect(repo.pageCalls, hasLength(1));
+    list.dispose();
+    await network.dispose();
+  });
 }

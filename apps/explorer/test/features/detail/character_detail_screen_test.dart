@@ -13,10 +13,13 @@ import '../../support/test_characters.dart';
 
 void main() {
   testWidgets('shows richer character fields', (tester) async {
+    final network = FakeNetwork();
+    addTearDown(network.dispose);
     final character = testCharacter();
     await tester.pumpWidget(
       MultiProvider(
         providers: [
+          ChangeNotifierProvider.value(value: network.provider),
           ChangeNotifierProvider(
             create: (_) => FavouritesProvider(
               getFavourites: GetFavouritesUseCase(FakeFavouritesRepository()),
