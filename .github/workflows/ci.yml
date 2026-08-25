@@ -1,0 +1,92 @@
+# Analyze and test SDK packages. Unchanged packages are skipped.
+# Changes under .github/ or a manual workflow_dispatch run every SDK.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  changes:
+    name: Detect changed SDKs
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.select.outputs.packages }}
+      any: ${{ steps.select.outputs.any }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Select SDK packages
+        id: select
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_BEFORE: ${{ github.event.before }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.sha }}
+        run: python3 .github/scripts/select_sdk_packages.py
+
+  analyze-and-test:
+    name: ${{ matrix.package }}
+    needs: changes
+    if: needs.changes.outputs.any == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.changes.outputs.packages) }}
+    defaults:
+      run:
+        working-directory: sdk/${{ matrix.package }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: "3.41.6"
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze --fatal-warnings
+
+      - name: Test
+        run: flutter test
+
+  ci:
+    name: CI
+    needs: [changes, analyze-and-test]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check CI result
+        run: |
+          if [[ "${{ needs.changes.result }}" != "success" ]]; then
+            echo "Change detection failed"
+            exit 1
+          fi
+          if [[ "${{ needs.changes.outputs.any }}" != "true" ]]; then
+            echo "No SDK package changes; skipped analyze and tests."
+            exit 0
+          fi
+          if [[ "${{ needs.analyze-and-test.result }}" != "success" ]]; then
+            echo "Analyze/test failed (${{ needs.analyze-and-test.result }})"
+            exit 1
+          fi
+          echo "All selected SDK packages passed analyze and tests."
