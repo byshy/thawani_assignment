@@ -1,3 +1,3 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+* Initial internal package: Hive-backed keyed read/write facade.
