@@ -36,7 +36,7 @@ Finishing **mandatory** scope is a complete submission. Bonuses are optional and
 | Favourites screen | `explorer` + local favourites | Empty state; sync with list/detail |
 | Offline cache + banner | repo + `thawani_ui` banner | See [offline-and-caching.md](offline-and-caching.md) |
 | Typed errors | `networking` / `thawani` | User-facing messages in UI |
-| DTO ≠ model | `thawani_models` | Explicit mappers |
+| DTO ≠ model | `thawani_models` | Explicit bidirectional mappers (`toEntity` / `toDto`) |
 | Tests | `thawani` + `explorer` | See [testing-strategy.md](testing-strategy.md) |
 | `flutter analyze` clean | all packages | No `// ignore:` to silence |
 

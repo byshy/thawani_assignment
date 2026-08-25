@@ -11,7 +11,7 @@ Ordered implementation plan. Documentation in this folder stays the source of tr
 
 ## Phase 1 — Scaffold
 
-1. Create Flutter packages under `sdk/`: all done except `thawani` (remaining: `thawani`).  
+1. Create Flutter packages under `sdk/` — done (all six packages).  
 2. Create `apps/explorer` Flutter app with path dependencies.  
 3. Wire flavors: Development, Production (entrypoints, Android product flavors, iOS schemes).  
 4. Add `apps/explorer/lib/di/` — `injection_container.dart` + split injectors (`get_it` via `needle`).  
@@ -23,7 +23,7 @@ Ordered implementation plan. Documentation in this folder stays the source of tr
 1. DTOs + entities + mappers in `thawani_models` — done (hand-written; no code gen / GraphQL).  
 2. Dio client + failures + connectivity in `networking` — done.  
 3. Hive facade in `local_storage` — done.  
-4. Remote + local data sources + repositories in `thawani`.  
+4. Remote + local data sources + repositories in `thawani` — done.  
 
 ## Phase 3 — Presentation
 

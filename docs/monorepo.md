@@ -26,7 +26,7 @@ thawani_assignment/
 └── README.md
 ```
 
-All SDK packages except `thawani` exist. Still planned: `thawani` and `apps/explorer`.
+All SDK packages exist. Still planned: `apps/explorer`.
 
 ## Package responsibilities
 
@@ -55,13 +55,16 @@ di/
 
 ### `sdk/thawani`
 
-Brand / product domain package — for this assignment it hosts Explorer domain behaviour that would otherwise be copy-pasted into every app:
+Product/domain package for Explorer character data:
 
-- Repository interfaces and implementations for characters (and episodes if bonus is implemented).
-- Remote/local data sources specific to this product API usage.
-- Feature-level helpers that are not generic infrastructure.
+- `CharacterRepository` / `FavouritesRepository` interfaces and implementations.
+- Remote data source (`/api/character` list, search, detail) on top of `networking.ApiClient`.
+- Local data sources for list/detail cache + favourites via `local_storage` (`StorageBoxes`).
+- Offline orchestration: network + cache write; failure/offline → cache hit; search HTTP `404` → empty page (not an error).
+- `NoCachedDataFailure` when offline with no cache.
+- Results carry `CacheMeta` (`fromCache` / `fetchedAt`) for the offline banner.
 
-Use cases stay in `apps/explorer`, not in this package.
+DTO ↔ entity mapping lives in `thawani_models`, not here. Use cases and DI registration stay in `apps/explorer`.
 
 In a multi-app Thawani setup, this package would grow with wallets, transfers, bill pay, and similar features. Explorer is the first consumer that proves the slot.
 
@@ -88,7 +91,7 @@ Keeps Explorer screens thin and gives a future Thawani app the same empty/error/
 - Dio-based `ApiClient` — `baseUrl` is required and supplied by the app (flavors / DI), not hardcoded in this package.
 - Real internet reachability via `ConnectivityChecker` (`internet_connection_checker_plus`), not Wi‑Fi/cellular attachment alone.
 - Mapping of `DioException` → typed remote failures (`NetworkFailure`, `ServerFailure`, `ParseFailure`, `CancelledFailure`).
-- Small JSON helpers (`requireJsonMap` / `requireJsonList`).
+- Small JSON helpers (`requireJsonMap` / `requireJsonList`) — shared by remote data sources; accept Dio `Map`/`List` shapes so feature packages do not reimplement casting.
 
 No feature-specific character endpoints here — those stay in `thawani`.
 

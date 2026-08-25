@@ -4,7 +4,7 @@ Thawani Flutter take-home: the **Explorer** app — a Rick and Morty character b
 
 This repo is a **multi-package monorepo**: runnable apps live under `apps/`, shared libraries under `sdk/`. Networking, storage, models, and UI live in the SDK; product apps stay thin shells that compose those packages. Another app can depend on `sdk/` instead of copying layers.
 
-> **Status:** SDK packages exist except `thawani`. Remaining: `thawani` and Explorer.
+> **Status:** All `sdk/` packages exist. Remaining: `apps/explorer` (scaffold + features).
 
 ---
 
@@ -98,7 +98,7 @@ Full detail: [docs/architecture.md](docs/architecture.md).
 
 *To be updated honestly before submission.*
 
-- Implementation started: all SDK packages except `thawani`. Remaining: `thawani` and Explorer.
+- Implementation started: all SDK packages. Remaining: Explorer app scaffold and presentation.
 - Bonus episodes feature: design documented in [docs/episode-fanout.md](docs/episode-fanout.md); implementation optional.
 
 ---

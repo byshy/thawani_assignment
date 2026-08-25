@@ -9,7 +9,7 @@
 | [testing-strategy.md](testing-strategy.md) | Tests that catch regressions |
 | [episode-fanout.md](episode-fanout.md) | Bonus Path 2 — episode batching design |
 | [roadmap.md](roadmap.md) | Phased implementation order |
-| [packages/](packages/) | Stub descriptions for packages not yet scaffolded |
+| [packages/](packages/) | Stub descriptions for packages not yet scaffolded (Explorer) |
 | [decisions/](decisions/) | Architecture Decision Records |
 
 Start at the root [README.md](../README.md).

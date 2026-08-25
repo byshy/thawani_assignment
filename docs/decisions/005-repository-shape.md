@@ -9,7 +9,7 @@ The brief mandates a repository between the UI and data sources (network + cache
 - Expose two repository interfaces from `sdk/thawani`:
   - `CharacterRepository` — list/search/detail and cache-aware character reads
   - `FavouritesRepository` — persist and observe favourites
-- Repository implementations live in `sdk/thawani` (remote + local sources and mapping for characters; local storage only for favourites).
+- Repository implementations live in `sdk/thawani` (remote + local sources for characters; local storage only for favourites). DTO ↔ entity mapping stays in `thawani_models`.
 - Use case classes live in `apps/explorer` (per feature), e.g. get page, get detail, toggle favourite, list favourites.
 - Providers depend on use cases (resolved via `sl<T>()` or injected at registration), not on repositories or data sources.
 - Search `404` → empty page result is handled in the repository/remote layer so UI and use cases can treat it as an empty result.
