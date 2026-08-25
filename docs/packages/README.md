@@ -2,7 +2,7 @@
 
 These READMEs describe packages **before** they are scaffolded. When each package is created, move/adapt this content into that package’s own `README.md`.
 
-Scaffolded: [`sdk/needle`](../../sdk/needle/README.md).
+Scaffolded: [`sdk/needle`](../../sdk/needle/README.md), [`sdk/thawani_models`](../../sdk/thawani_models/README.md).
 
 ## `apps/explorer`
 
@@ -11,10 +11,6 @@ Flutter application implementing the Rick and Morty Explorer assignment. Composi
 ## `sdk/thawani`
 
 Product/domain package. Character (and optional episode) repositories, remote/local data sources, orchestration of cache vs network. Depends on `thawani_models`, `networking`, `local_storage`. Use cases live in the app, not here.
-
-## `sdk/thawani_models`
-
-Shared entities, API DTOs, and explicit mappers. No HTTP or Hive. Consumed by domain and UI.
 
 ## `sdk/thawani_ui`
 
