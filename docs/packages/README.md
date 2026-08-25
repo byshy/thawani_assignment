@@ -2,7 +2,7 @@
 
 These READMEs describe packages **before** they are scaffolded. When each package is created, move/adapt this content into that package’s own `README.md`.
 
-Scaffolded: [`sdk/needle`](../../sdk/needle/README.md), [`sdk/thawani_models`](../../sdk/thawani_models/README.md), [`sdk/networking`](../../sdk/networking/README.md).
+Scaffolded: [`sdk/needle`](../../sdk/needle/README.md), [`sdk/thawani_models`](../../sdk/thawani_models/README.md), [`sdk/networking`](../../sdk/networking/README.md), [`sdk/local_storage`](../../sdk/local_storage/README.md).
 
 ## `apps/explorer`
 
@@ -15,7 +15,3 @@ Product/domain package. Character (and optional episode) repositories, remote/lo
 ## `sdk/thawani_ui`
 
 Design tokens and reusable widgets: list row chrome, empty/error states, offline banner, favourite control, loading indicators. Presentation-only.
-
-## `sdk/local_storage`
-
-Hive-backed persistence facade. Feature-agnostic read/write; repositories own cache policy.

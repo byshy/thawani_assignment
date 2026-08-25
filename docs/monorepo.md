@@ -26,7 +26,7 @@ thawani_assignment/
 └── README.md
 ```
 
-`sdk/needle`, `sdk/thawani_models`, and `sdk/networking` exist. Other SDK packages and `apps/explorer` are still planned.
+Leaf SDK packages exist (`needle`, `thawani_models`, `networking`, `local_storage`). Still planned: `thawani_ui`, `thawani`, and `apps/explorer`.
 
 ## Package responsibilities
 
@@ -46,7 +46,7 @@ The app is the **composition root**: `initSL()` registers dependencies, hosts na
 ```text
 di/
   injection_container.dart   # initSL(); sl lives in needle
-  external_injector.dart     # ApiClient(baseUrl from app), connectivity, Hive / local_storage init
+  external_injector.dart     # ApiClient(baseUrl from app), ConnectivityChecker, LocalStorage.init
   datasource_injector.dart   # remote + local data sources
   repository_injector.dart   # CharacterRepository, FavouritesRepository
   use_case_injector.dart     # feature use cases
@@ -93,9 +93,17 @@ No feature-specific character endpoints here — those stay in `thawani`.
 
 ### `sdk/local_storage`
 
-- Thin abstraction over Hive (or SQLite if we switch — Hive is the default plan).
-- Box open/init, typed read/write helpers.
-- No business rules (what to cache when) — repositories own policy; this package owns **how** bytes/objects persist.
+- Hive CE–backed `LocalStorage` facade: `init()` / `initPath()`, map put/get/delete/clear helpers.
+- Callers own box names and value shapes (list/detail cache, favourites live in `thawani`).
+- `StorageFailure` for unexpected value types.
+- No cache policy — repositories decide what to store and when.
+
+```dart
+import 'package:local_storage/local_storage.dart';
+
+await storage.putMap('favourites', '1', json);
+final cached = await storage.getMap('favourites', '1');
+```
 
 ### `sdk/needle`
 
@@ -134,7 +142,7 @@ thawani_ui
     └── thawani_models      (optional; only if widgets need entity types)
 
 networking          → (Flutter/Dart + Dio + internet_connection_checker_plus)
-local_storage       → (Flutter/Dart + Hive only)
+local_storage       → (Flutter/Dart + hive_ce / hive_ce_flutter)
 thawani_models      → (Dart; prefer pure Dart)
 ```
 

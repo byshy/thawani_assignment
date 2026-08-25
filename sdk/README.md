@@ -8,7 +8,7 @@ Shared Flutter/Dart packages consumed by apps.
 | `thawani_models/` | Entities, DTOs, mappers — **scaffolded** |
 | `thawani_ui/` | Design system & shared widgets |
 | `networking/` | HTTP, connectivity, remote failures — **scaffolded** |
-| `local_storage/` | Local persistence (Hive) |
+| `local_storage/` | Local persistence (Hive) — **scaffolded** |
 | `needle/` | get_it re-export for DI — **scaffolded** |
 
-`needle`, `thawani_models`, and `networking` exist. Remaining packages are still planned. Dependency rules: [../docs/monorepo.md](../docs/monorepo.md).
+Leaf SDK packages exist. Remaining: `thawani_ui` and `thawani`. Dependency rules: [../docs/monorepo.md](../docs/monorepo.md).

@@ -19,7 +19,7 @@ Offline behaviour is a **core** requirement, not a bonus.
 | Favourites | Favourited characters (enough fields to render list/detail rows) | Yes |
 | In-memory episode cache | Only if bonus Path 1 is implemented | No by default (see episode doc) |
 
-Default persistence: **Hive** via `sdk/local_storage` (see [decisions/003-persistence.md](decisions/003-persistence.md)).
+Default persistence: **Hive CE** via `sdk/local_storage` (see [decisions/003-persistence.md](decisions/003-persistence.md)).
 
 ## Repository policy
 
