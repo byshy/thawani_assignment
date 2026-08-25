@@ -19,4 +19,11 @@ class CharacterPageDto {
           const [],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'info': info.toJson(),
+      'results': results.map((dto) => dto.toJson()).toList(),
+    };
+  }
 }

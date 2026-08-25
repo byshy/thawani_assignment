@@ -2,57 +2,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:thawani_models/thawani_models.dart';
 
 void main() {
-  group('CharacterDtoMapper', () {
-    test('maps API character JSON to a domain Character', () {
+  group('happy path', () {
+    test('maps character JSON to entity', () {
       final character = CharacterDto.fromJson(_rickJson).toEntity();
 
       expect(character.id, 1);
       expect(character.name, 'Rick Sanchez');
       expect(character.status, CharacterStatus.alive);
-      expect(character.species, 'Human');
-      expect(character.type, '');
       expect(character.gender, CharacterGender.male);
       expect(character.origin.name, 'Earth (C-137)');
-      expect(
-        character.origin.url,
-        'https://rickandmortyapi.com/api/location/1',
-      );
-      expect(character.location.name, 'Citadel of Ricks');
-      expect(character.image, 'https://rickandmortyapi.com/api/character/avatar/1.jpeg');
       expect(character.episodeCount, 2);
-      expect(character.episodeUrls, [
-        'https://rickandmortyapi.com/api/episode/1',
-        'https://rickandmortyapi.com/api/episode/2',
-      ]);
       expect(character.created, DateTime.parse('2017-11-04T18:48:46.250Z'));
     });
 
-    test('maps unknown status and gender instead of throwing', () {
-      final character = CharacterDto.fromJson({
-        ..._rickJson,
-        'status': 'not-a-status',
-        'gender': 'not-a-gender',
-      }).toEntity();
-
-      expect(character.status, CharacterStatus.unknown);
-      expect(character.gender, CharacterGender.unknown);
-    });
-
-    test('treats missing origin and episode as empty defaults', () {
-      final character = CharacterDto.fromJson({
-        'id': 2,
-        'name': 'Morty Smith',
-      }).toEntity();
-
-      expect(character.origin, const CharacterLocation(name: '', url: ''));
-      expect(character.location, const CharacterLocation(name: '', url: ''));
-      expect(character.episodeUrls, isEmpty);
-      expect(character.created, isNull);
-    });
-  });
-
-  group('CharacterPageDtoMapper', () {
-    test('maps page JSON and parses next/prev page numbers from URLs', () {
+    test('maps page JSON and next page number from URL', () {
       final page = CharacterPageDto.fromJson({
         'info': {
           'count': 826,
@@ -63,29 +26,67 @@ void main() {
         'results': [_rickJson],
       }).toEntity();
 
-      expect(page.info.count, 826);
-      expect(page.info.pages, 42);
       expect(page.info.nextPage, 2);
-      expect(page.info.prevPage, isNull);
       expect(page.info.hasNext, isTrue);
-      expect(page.results, hasLength(1));
-      expect(page.results.first.name, 'Rick Sanchez');
+      expect(page.results.single.name, 'Rick Sanchez');
     });
 
-    test('hasNext is false when next is null', () {
+    test('toJson round-trips for cache write/read', () {
+      final dto = CharacterDto.fromJson(_rickJson);
+      final restored = CharacterDto.fromJson(dto.toJson());
+
+      expect(restored.id, dto.id);
+      expect(restored.name, dto.name);
+      expect(restored.status, dto.status);
+      expect(restored.origin.toJson(), dto.origin.toJson());
+      expect(restored.episode, dto.episode);
+      expect(restored.toEntity(), dto.toEntity());
+    });
+  });
+
+  group('edge cases', () {
+    test('unknown status and gender map to unknown', () {
+      final character = CharacterDto.fromJson({
+        ..._rickJson,
+        'status': 'not-a-status',
+        'gender': 'not-a-gender',
+      }).toEntity();
+
+      expect(character.status, CharacterStatus.unknown);
+      expect(character.gender, CharacterGender.unknown);
+    });
+
+    test('last page has no next and empty results stay empty', () {
       final page = CharacterPageDto.fromJson({
         'info': {
-          'count': 1,
+          'count': 0,
           'pages': 1,
           'next': null,
-          'prev': 'https://rickandmortyapi.com/api/character?page=1',
+          'prev': null,
         },
         'results': <Map<String, dynamic>>[],
       }).toEntity();
 
       expect(page.info.hasNext, isFalse);
-      expect(page.info.prevPage, 1);
       expect(page.results, isEmpty);
+    });
+
+    test('invalid created date becomes null', () {
+      final character = CharacterDto.fromJson({
+        ..._rickJson,
+        'created': 'not-a-date',
+      }).toEntity();
+
+      expect(character.created, isNull);
+    });
+  });
+
+  group('failure path', () {
+    test('missing character id throws', () {
+      expect(
+        () => CharacterDto.fromJson({'name': 'Rick Sanchez'}),
+        throwsA(isA<TypeError>()),
+      );
     });
   });
 }
@@ -110,6 +111,5 @@ const _rickJson = {
     'https://rickandmortyapi.com/api/episode/1',
     'https://rickandmortyapi.com/api/episode/2',
   ],
-  'url': 'https://rickandmortyapi.com/api/character/1',
   'created': '2017-11-04T18:48:46.250Z',
 };

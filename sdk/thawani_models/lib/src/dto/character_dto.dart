@@ -49,4 +49,20 @@ class CharacterDto {
       created: json['created'] as String?,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'status': status,
+      'species': species,
+      'type': type,
+      'gender': gender,
+      'origin': origin.toJson(),
+      'location': location.toJson(),
+      'image': image,
+      'episode': episode,
+      'created': created,
+    };
+  }
 }

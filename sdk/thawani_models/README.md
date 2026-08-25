@@ -7,6 +7,7 @@ Internal entities, Rick and Morty API DTOs, and explicit hand-written mappers.
 ```dart
 import 'package:thawani_models/thawani_models.dart';
 
-final character = CharacterDto.fromJson(json).toEntity();
-final page = CharacterPageDto.fromJson(json).toEntity();
+final dto = CharacterDto.fromJson(json);
+final character = dto.toEntity();
+final cached = dto.toJson();
 ```

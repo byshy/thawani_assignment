@@ -19,4 +19,13 @@ class PageInfoDto {
       prev: json['prev'] as String?,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'count': count,
+      'pages': pages,
+      'next': next,
+      'prev': prev,
+    };
+  }
 }

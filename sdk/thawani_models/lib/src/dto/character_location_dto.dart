@@ -13,4 +13,11 @@ class CharacterLocationDto {
       url: json?['url'] as String? ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'url': url,
+    };
+  }
 }
