@@ -13,4 +13,15 @@ enum CharacterStatus {
         return CharacterStatus.unknown;
     }
   }
+
+  String toApi() {
+    switch (this) {
+      case CharacterStatus.alive:
+        return 'Alive';
+      case CharacterStatus.dead:
+        return 'Dead';
+      case CharacterStatus.unknown:
+        return 'unknown';
+    }
+  }
 }

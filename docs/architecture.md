@@ -55,7 +55,7 @@ The repo is also split into `apps/` and `sdk/` packages so shared networking, st
 
 - **Remote:** Rick and Morty REST via `networking` (`ApiClient` with app-supplied `baseUrl`, typed failures, real reachability checks). Hand-written DTOs — no GraphQL, no API code generation.
 - **Local:** list/detail cache + favourites via `local_storage` (Hive CE facade).
-- **Mappers:** `CharacterDto` → `Character` (and reverse only if needed for cache).
+- **Mappers:** bidirectional DTO ↔ entity in `thawani_models` (`toEntity` / `toDto`); repositories consume them.
 - **Repository:** chooses network vs cache, writes cache on success, exposes a single API to use cases.
 
 ## Request flow (list)
@@ -138,7 +138,9 @@ Map transport and parse failures into domain failures, for example:
 - `NetworkFailure` — no connectivity / timeout / socket
 - `ServerFailure` — unexpected HTTP (except search `404` → empty)
 - `ParseFailure` — malformed JSON
-- `CacheFailure` — local read/write issues (rare; usually surface as soft degradation)
+- `CancelledFailure` — disposed / stale request
+- `NoCachedDataFailure` — offline with no usable cache (`thawani`)
+- `StorageFailure` — local read/write type issues (`local_storage`)
 
 Presentation maps failures to user copy + retry. Never show stack traces.
 

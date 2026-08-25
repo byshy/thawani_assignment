@@ -42,6 +42,28 @@ void main() {
       expect(restored.episode, dto.episode);
       expect(restored.toEntity(), dto.toEntity());
     });
+
+    test('character entity toDto round-trips through toEntity', () {
+      final entity = CharacterDto.fromJson(_rickJson).toEntity();
+      expect(entity.toDto().toEntity(), entity);
+    });
+
+    test('page entity toDto round-trips page numbers', () {
+      final page = CharacterPageDto.fromJson({
+        'info': {
+          'count': 826,
+          'pages': 42,
+          'next': 'https://rickandmortyapi.com/api/character?page=2',
+          'prev': 'https://rickandmortyapi.com/api/character?page=1',
+        },
+        'results': [_rickJson],
+      }).toEntity();
+
+      final restored = page.toDto().toEntity();
+      expect(restored.info.nextPage, 2);
+      expect(restored.info.prevPage, 1);
+      expect(restored.results.single, page.results.single);
+    });
   });
 
   group('edge cases', () {

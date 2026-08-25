@@ -9,4 +9,5 @@ import 'package:networking/networking.dart';
 
 final client = ApiClient(baseUrl: appConfig.baseUrl); // from app / flavors
 final online = await ConnectivityChecker().isOnline;
+final json = requireJsonMap(response.data); // shared by remote data sources
 ```

@@ -10,7 +10,7 @@ I implement `sdk/networking` with **Dio** as the HTTP client (`ApiClient`), plus
 
 Reachability uses **`internet_connection_checker_plus`** (real internet access), not `connectivity_plus` (which only reports interface attachment).
 
-`ApiClient` requires a `baseUrl` from the app (flavors / DI).
+`ApiClient` requires a `baseUrl` from the app (flavors / DI). Shared `requireJsonMap` / `requireJsonList` helpers live here so remote data sources do not reimplement Dio payload casting.
 
 Character-specific endpoints live in `thawani` remote data sources that **use** networking — not inside the networking package itself.
 

@@ -1,0 +1,24 @@
+name: thawani
+description: Internal product/domain package — character repositories and data sources.
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.11.4
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  local_storage:
+    path: ../local_storage
+  networking:
+    path: ../networking
+  thawani_models:
+    path: ../thawani_models
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+  http_mock_adapter: ^0.6.1
