@@ -1,0 +1,20 @@
+name: networking
+description: Internal Dio client, connectivity, and typed remote failures.
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.11.4
+  flutter: ">=1.17.0"
+
+dependencies:
+  dio: ^5.11.0
+  flutter:
+    sdk: flutter
+  internet_connection_checker_plus: ^3.1.1
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+  http_mock_adapter: ^0.6.1

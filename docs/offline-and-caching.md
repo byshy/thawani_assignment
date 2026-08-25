@@ -64,7 +64,7 @@ If we must cut under time pressure: keep serving cache; drop the relative-time d
 
 ## Connectivity
 
-- `networking` exposes a connectivity stream/checker.  
+- `networking` exposes a connectivity stream/checker (`ConnectivityChecker`) based on real internet reachability.  
 - List Provider may auto-refresh page 1 when transitioning offline → online (optional but nice).  
 - Manual pull-to-refresh and error retry remain primary recovery paths.
 

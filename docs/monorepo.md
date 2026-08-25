@@ -26,7 +26,7 @@ thawani_assignment/
 └── README.md
 ```
 
-`sdk/needle` and `sdk/thawani_models` exist. Other SDK packages and `apps/explorer` are still planned.
+`sdk/needle`, `sdk/thawani_models`, and `sdk/networking` exist. Other SDK packages and `apps/explorer` are still planned.
 
 ## Package responsibilities
 
@@ -46,7 +46,7 @@ The app is the **composition root**: `initSL()` registers dependencies, hosts na
 ```text
 di/
   injection_container.dart   # initSL(); sl lives in needle
-  external_injector.dart     # Dio, Hive / local_storage init
+  external_injector.dart     # ApiClient(baseUrl from app), connectivity, Hive / local_storage init
   datasource_injector.dart   # remote + local data sources
   repository_injector.dart   # CharacterRepository, FavouritesRepository
   use_case_injector.dart     # feature use cases
@@ -84,10 +84,10 @@ Keeps Explorer screens thin and gives a future Thawani app the same empty/error/
 
 ### `sdk/networking`
 
-- HTTP client wrapper (likely Dio) configured once.
-- Connectivity / “are we online?” abstraction.
-- Mapping of transport exceptions → typed remote failures.
-- Base remote data source helpers if they stay generic.
+- Dio-based `ApiClient` — `baseUrl` is required and supplied by the app (flavors / DI), not hardcoded in this package.
+- Real internet reachability via `ConnectivityChecker` (`internet_connection_checker_plus`), not Wi‑Fi/cellular attachment alone.
+- Mapping of `DioException` → typed remote failures (`NetworkFailure`, `ServerFailure`, `ParseFailure`, `CancelledFailure`).
+- Small JSON helpers (`requireJsonMap` / `requireJsonList`).
 
 No feature-specific character endpoints here — those stay in `thawani`.
 
@@ -133,7 +133,7 @@ needle              → get_it only
 thawani_ui
     └── thawani_models      (optional; only if widgets need entity types)
 
-networking          → (Flutter/Dart + HTTP libs only)
+networking          → (Flutter/Dart + Dio + internet_connection_checker_plus)
 local_storage       → (Flutter/Dart + Hive only)
 thawani_models      → (Dart; prefer pure Dart)
 ```
