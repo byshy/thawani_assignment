@@ -1,0 +1,17 @@
+name: thawani_models
+description: Internal entities, API DTOs, and explicit mappers shared across SDK packages and apps.
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.11.4
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

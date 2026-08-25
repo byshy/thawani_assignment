@@ -26,7 +26,7 @@ thawani_assignment/
 └── README.md
 ```
 
-`sdk/needle` exists. Other SDK packages and `apps/explorer` are still planned.
+`sdk/needle` and `sdk/thawani_models` exist. Other SDK packages and `apps/explorer` are still planned.
 
 ## Package responsibilities
 
@@ -67,9 +67,10 @@ In a multi-app Thawani setup, this package would grow with wallets, transfers, b
 
 ### `sdk/thawani_models`
 
-- Domain entities used by UI and domain (`Character`, episode summaries, pagination `PageInfo`, cache metadata).
-- API DTOs (`CharacterDto`, response wrappers) and **explicit mappers**.
-- Shared enums / value types (status, gender, etc.) if useful.
+- Domain entities used by UI and domain (`Character`, pagination `PageInfo`, cache metadata).
+- API DTOs (`CharacterDto`, response wrappers) with `fromJson` / `toJson` (for cache) and **explicit** `toEntity()` mappers.
+- Shared enums / value types (status, gender).
+- Episode types deferred until Path 1 bonus work (see [episode-fanout.md](episode-fanout.md)).
 
 **Rule:** widgets import models, never raw response maps.
 
