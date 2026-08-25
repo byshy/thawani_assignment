@@ -68,7 +68,7 @@ In a multi-app Thawani setup, this package would grow with wallets, transfers, b
 ### `sdk/thawani_models`
 
 - Domain entities used by UI and domain (`Character`, pagination `PageInfo`, cache metadata).
-- API DTOs (`CharacterDto`, response wrappers) with `fromJson` / `toJson` (for cache) and **explicit** `toEntity()` mappers.
+- API DTOs (`CharacterDto`, response wrappers) with `fromJson` / `toJson` (for cache) and **explicit** bidirectional mappers (`toEntity` / `toDto`).
 - Shared enums / value types (status, gender).
 - Episode types deferred until Path 1 bonus work (see [episode-fanout.md](episode-fanout.md)).
 

@@ -13,6 +13,15 @@ extension CharacterPageDtoMapper on CharacterPageDto {
   }
 }
 
+extension CharacterPageEntityMapper on CharacterPage {
+  CharacterPageDto toDto() {
+    return CharacterPageDto(
+      info: info.toDto(),
+      results: results.map((character) => character.toDto()).toList(),
+    );
+  }
+}
+
 extension PageInfoDtoMapper on PageInfoDto {
   PageInfo toEntity() {
     return PageInfo(
@@ -20,6 +29,18 @@ extension PageInfoDtoMapper on PageInfoDto {
       pages: pages,
       nextPage: pageNumberFromUrl(next),
       prevPage: pageNumberFromUrl(prev),
+    );
+  }
+}
+
+extension PageInfoEntityMapper on PageInfo {
+  /// Rebuilds next/prev as query URLs so [pageNumberFromUrl] round-trips.
+  PageInfoDto toDto() {
+    return PageInfoDto(
+      count: count,
+      pages: pages,
+      next: nextPage == null ? null : '?page=$nextPage',
+      prev: prevPage == null ? null : '?page=$prevPage',
     );
   }
 }

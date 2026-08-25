@@ -23,8 +23,32 @@ extension CharacterDtoMapper on CharacterDto {
   }
 }
 
+extension CharacterEntityMapper on Character {
+  CharacterDto toDto() {
+    return CharacterDto(
+      id: id,
+      name: name,
+      status: status.toApi(),
+      species: species,
+      type: type,
+      gender: gender.toApi(),
+      origin: origin.toDto(),
+      location: location.toDto(),
+      image: image,
+      episode: List<String>.unmodifiable(episodeUrls),
+      created: created?.toIso8601String(),
+    );
+  }
+}
+
 extension CharacterLocationDtoMapper on CharacterLocationDto {
   CharacterLocation toEntity() {
     return CharacterLocation(name: name, url: url);
+  }
+}
+
+extension CharacterLocationEntityMapper on CharacterLocation {
+  CharacterLocationDto toDto() {
+    return CharacterLocationDto(name: name, url: url);
   }
 }

@@ -16,4 +16,17 @@ enum CharacterGender {
         return CharacterGender.unknown;
     }
   }
+
+  String toApi() {
+    switch (this) {
+      case CharacterGender.female:
+        return 'Female';
+      case CharacterGender.male:
+        return 'Male';
+      case CharacterGender.genderless:
+        return 'Genderless';
+      case CharacterGender.unknown:
+        return 'unknown';
+    }
+  }
 }
