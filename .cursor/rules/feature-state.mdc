@@ -1,0 +1,52 @@
+---
+description: Split feature state and providers into a state/ folder (all apps)
+globs: "**/lib/features/**/*"
+alwaysApply: true
+---
+
+# Feature state folder
+
+Every Flutter app in this monorepo that uses feature folders keeps **state** and **provider/notifier** in separate files under `state/`.
+
+## Layout
+
+```
+lib/features/<feature>/
+  state/
+    <feature>_state.dart       # immutable state (+ enums used only by that state)
+    <feature>_provider.dart    # ChangeNotifier (or equivalent); imports state file
+  <feature>_screen.dart
+```
+
+Example: `apps/explorer/lib/features/list/state/`.
+
+## State file
+
+- Holds the immutable `*State` class, `copyWith`, and feature-specific enums (e.g. `CharactersListStatus`).
+- No Flutter widgets, no `ChangeNotifier`, no use-case or repository calls.
+
+## Provider file
+
+- Extends `ChangeNotifier` (or the app’s chosen notifier base); owns `_state`, `state` getter, and `_emit`.
+- Imports the matching `*_state.dart`; does **not** define state classes inline.
+- Calls use cases / repositories only here—not from screens or widgets.
+
+## Screens and DI
+
+- Screens import `state/<feature>_provider.dart` (not a barrel).
+- Router / injector registers the provider from `state/` and wraps routes with the required providers.
+
+## Tests
+
+Mirror under `test/features/<feature>/state/` (see `test-mirrors-lib`):
+
+```
+lib/features/list/state/characters_list_provider.dart
+  → test/features/list/state/characters_list_provider_test.dart
+```
+
+## Do not
+
+- Combine state + provider in one file for new or moved features
+- Put mutable public fields on the provider—use `state` + `copyWith`
+- Import `sl` or repositories from screens (router/DI wraps providers)

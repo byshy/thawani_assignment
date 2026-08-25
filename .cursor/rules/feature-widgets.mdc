@@ -1,0 +1,54 @@
+---
+description: Extract feature widgets from screens into widgets/ (all apps)
+globs: "**/lib/features/**/*"
+alwaysApply: true
+---
+
+# Feature widgets folder
+
+In every app, screens compose layout; reusable or non-trivial UI lives in `widgets/`—not as private classes in the screen file.
+
+## Layout
+
+```
+lib/features/<feature>/
+  widgets/
+    <descriptive_name>.dart    # public StatelessWidget (or StatefulWidget)
+  <feature>_screen.dart        # scaffold, app bar, wiring only
+```
+
+Example: `apps/explorer/lib/features/list/widgets/characters_list_body.dart`.
+
+## When to extract
+
+Move a widget out of a screen when it is:
+
+- A named `StatelessWidget` / `StatefulWidget` that would otherwise be `_PrivateWidget`
+- A distinct UI block (list body, row variant, fact row, form section)
+- Shared by more than one screen **in the same feature**
+
+Keep inline only: trivial one-off padding/`SizedBox`/`Text` with no logic.
+
+## Naming and visibility
+
+- File name: `snake_case.dart`; class name: `PascalCase` (no leading `_`).
+- Widgets take data/callbacks via constructor params; read providers with `Consumer` / `context.read` inside the widget when needed.
+
+## Shared UI outside a feature
+
+| Scope | Location |
+|-------|----------|
+| Used by multiple features in one app | `apps/<app>/lib/widgets/` |
+| Design-system / cross-app reusable UI | `sdk/thawani_ui/lib/src/widgets/` |
+
+Do not duplicate the same widget under multiple feature folders.
+
+## Tests
+
+If a widget has meaningful behavior, add `test/features/<feature>/widgets/<name>_test.dart` mirroring `lib/`. Screen tests may cover simple widgets without a dedicated file.
+
+## Do not
+
+- Define `_ListBody`, `_Fact`, etc. at the bottom of `*_screen.dart`
+- Put providers or use cases in widget files—only consume them
+- Put feature-specific UI in app-root `lib/widgets/` (use `features/<feature>/widgets/`)
