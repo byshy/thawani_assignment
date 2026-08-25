@@ -4,7 +4,7 @@ Product applications.
 
 | App | Role |
 |-----|------|
-| `explorer/` | Rick and Morty Explorer — flavors and DI wired; screens still to be built |
+| `explorer/` | Rick and Morty Explorer — list, detail, favourites, flavors, and DI |
 
 Apps depend on packages under `../sdk/`. They own navigation, Provider wiring, use cases flavors, and screens.
 

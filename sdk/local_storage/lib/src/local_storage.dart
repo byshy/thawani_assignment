@@ -91,10 +91,29 @@ class LocalStorage {
     required String key,
   }) {
     if (value is Map) {
-      return Map<String, dynamic>.from(value);
+      return _normalizeMap(value);
     }
     throw StorageFailure(
       message: 'Expected Map for key "$key" in box "$boxName"',
     );
+  }
+
+  Map<String, dynamic> _normalizeMap(Map<dynamic, dynamic> map) {
+    return Map<String, dynamic>.from(
+      map.map(
+        (entryKey, entryValue) =>
+            MapEntry(entryKey.toString(), _normalizeValue(entryValue)),
+      ),
+    );
+  }
+
+  dynamic _normalizeValue(Object? value) {
+    if (value is Map) {
+      return _normalizeMap(value);
+    }
+    if (value is List) {
+      return value.map(_normalizeValue).toList();
+    }
+    return value;
   }
 }

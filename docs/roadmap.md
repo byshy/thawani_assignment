@@ -27,12 +27,12 @@ Ordered implementation plan. Documentation in this folder stays the source of tr
 
 ## Phase 3 — Presentation
 
-1. App shell with tabs/routes: List | Favourites (+ Detail push).  
-2. Use cases in `apps/explorer` on top of repositories.  
-3. List Provider → use cases: pagination, debounce, pull-to-refresh, UI states.  
-4. Detail screen + shared favourites notifier (via use cases).  
-5. Favourites screen + empty state.  
-6. Offline banner wired to cache metadata.  
+1. App shell with tabs/routes: List | Favourites (+ Detail push) — done.  
+2. Use cases in `apps/explorer` on top of repositories — done.  
+3. List Provider → use cases: pagination, debounce, pull-to-refresh, UI states — done.  
+4. Detail screen + shared favourites notifier (via use cases) — done.  
+5. Favourites screen + empty state — done.  
+6. Offline banner wired to cache metadata — done.  
 
 ## Phase 4 — Quality
 
