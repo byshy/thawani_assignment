@@ -15,6 +15,7 @@ dependencies:
     path: ../../sdk/needle
   networking:
     path: ../../sdk/networking
+  provider: ^6.1.5+1
   thawani:
     path: ../../sdk/thawani
   thawani_models:

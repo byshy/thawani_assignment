@@ -1,0 +1,47 @@
+import 'package:explorer/features/detail/state/character_detail_provider.dart';
+import 'package:explorer/features/detail/character_detail_screen.dart';
+import 'package:explorer/features/favourites/state/favourites_provider.dart';
+import 'package:explorer/use_cases/get_character_use_case.dart';
+import 'package:explorer/use_cases/get_favourites_use_case.dart';
+import 'package:explorer/use_cases/toggle_favourite_use_case.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
+
+import '../../support/fakes.dart';
+import '../../support/test_characters.dart';
+
+void main() {
+  testWidgets('shows richer character fields', (tester) async {
+    final character = testCharacter();
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => FavouritesProvider(
+              getFavourites: GetFavouritesUseCase(FakeFavouritesRepository()),
+              toggleFavourite: ToggleFavouriteUseCase(
+                FakeFavouritesRepository(),
+              ),
+            ),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => CharacterDetailProvider(
+              getCharacter: GetCharacterUseCase(FakeCharacterRepository()),
+            )..load(character.id),
+          ),
+        ],
+        child: MaterialApp(home: CharacterDetailScreen(character: character)),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Rick Sanchez'), findsWidgets);
+    expect(find.text('Status'), findsOneWidget);
+    expect(find.text('Species'), findsOneWidget);
+    expect(find.text('Origin'), findsOneWidget);
+    expect(find.text('Location'), findsOneWidget);
+    expect(find.text('Episodes'), findsOneWidget);
+  });
+}

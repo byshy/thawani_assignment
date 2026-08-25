@@ -39,6 +39,23 @@ void main() {
       expect(await storage.containsKey('favourites', '1'), isTrue);
     });
 
+    test('nested maps round-trip with string keys after Hive read', () async {
+      await storage.putMap('favourites', '1', {
+        'id': 1,
+        'name': 'Rick Sanchez',
+        'origin': {'name': 'Earth', 'url': 'https://example.com'},
+        'episode': ['https://example.com/api/episode/1'],
+      });
+
+      final cached = await storage.getMap('favourites', '1');
+
+      expect(cached?['origin'], {
+        'name': 'Earth',
+        'url': 'https://example.com',
+      });
+      expect(cached?['episode'], ['https://example.com/api/episode/1']);
+    });
+
     test('getAllMaps returns every map entry', () async {
       await storage.putMap('cache', 'page-1', {'page': 1});
       await storage.putMap('cache', 'page-2', {'page': 2});

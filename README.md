@@ -4,7 +4,7 @@ Thawani Flutter take-home: the **Explorer** app — a Rick and Morty character b
 
 This repo is a **multi-package monorepo**: runnable apps live under `apps/`, shared libraries under `sdk/`. Networking, storage, models, and UI live in the SDK; product apps stay thin shells that compose those packages. Another app can depend on `sdk/` instead of copying layers.
 
-> **Status:** SDK packages and Explorer flavors/DI exist. Remaining: Explorer screens (Phase 3).
+> **Status:** SDK packages and Explorer presentation (list, detail, favourites) exist. Remaining: Phase 4 quality pass (README details, extra polish).
 
 ---
 

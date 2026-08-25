@@ -1,0 +1,35 @@
+import 'package:explorer/di/use_case_injector.dart';
+import 'package:explorer/features/detail/state/character_detail_provider.dart';
+import 'package:explorer/features/favourites/state/favourites_provider.dart';
+import 'package:explorer/features/list/state/characters_list_provider.dart';
+import 'package:needle/needle.dart';
+import 'package:thawani/thawani.dart';
+import 'package:thawani_ui/thawani_ui.dart';
+
+import 'fakes.dart';
+
+Future<void> registerTestDependencies({
+  FakeCharacterRepository? characters,
+  FakeFavouritesRepository? favourites,
+}) async {
+  await sl.reset();
+  sl.registerSingleton<CharacterRepository>(
+    characters ?? FakeCharacterRepository(),
+  );
+  sl.registerSingleton<FavouritesRepository>(
+    favourites ?? FakeFavouritesRepository(),
+  );
+  registerUseCases();
+  sl.registerLazySingleton<FavouritesProvider>(
+    () => FavouritesProvider(getFavourites: sl(), toggleFavourite: sl()),
+  );
+  sl.registerFactory<CharactersListProvider>(
+    () => CharactersListProvider(
+      getPage: sl(),
+      searchDebouncer: Debouncer(delay: Duration.zero),
+    ),
+  );
+  sl.registerFactory<CharacterDetailProvider>(
+    () => CharacterDetailProvider(getCharacter: sl()),
+  );
+}
