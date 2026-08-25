@@ -2,5 +2,4 @@
 <resources>
     <!-- Overridden per flavor in src/dev and src/prod. -->
     <color name="splash_background">#42B4CA</color>
-    <color name="ic_launcher_background">#42B4CA</color>
 </resources>
