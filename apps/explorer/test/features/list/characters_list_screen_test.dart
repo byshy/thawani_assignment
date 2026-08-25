@@ -1,4 +1,5 @@
 import 'package:explorer/config/flavor_config.dart';
+import 'package:explorer/core/state/network_provider.dart';
 import 'package:explorer/features/favourites/state/favourites_provider.dart';
 import 'package:explorer/features/list/state/characters_list_provider.dart';
 import 'package:explorer/features/list/characters_list_screen.dart';
@@ -17,10 +18,12 @@ import '../../support/test_characters.dart';
 Widget _listHarness({
   required CharactersListProvider list,
   required FavouritesProvider favourites,
+  required NetworkProvider network,
 }) {
   return MultiProvider(
     providers: [
       Provider.value(value: FlavorConfig.dev()),
+      ChangeNotifierProvider.value(value: network),
       ChangeNotifierProvider.value(value: favourites),
       ChangeNotifierProvider.value(value: list),
     ],
@@ -32,6 +35,8 @@ void main() {
   testWidgets('favourite tap on a list row persists and updates the icon', (
     tester,
   ) async {
+    final network = FakeNetwork();
+    addTearDown(network.dispose);
     final characters = FakeCharacterRepository();
     final favourites = FakeFavouritesRepository();
     final listProvider = CharactersListProvider(
@@ -44,7 +49,11 @@ void main() {
     );
 
     await tester.pumpWidget(
-      _listHarness(list: listProvider, favourites: favouritesProvider),
+      _listHarness(
+        list: listProvider,
+        favourites: favouritesProvider,
+        network: network.provider,
+      ),
     );
     await tester.pump();
     await tester.pump();
@@ -62,6 +71,8 @@ void main() {
   });
 
   testWidgets('shows a retry footer when the next page fails', (tester) async {
+    final network = FakeNetwork();
+    addTearDown(network.dispose);
     final characters = FakeCharacterRepository()
       ..onGetPage = (query, page) async {
         if (page == 1) {
@@ -83,6 +94,7 @@ void main() {
           getFavourites: GetFavouritesUseCase(FakeFavouritesRepository()),
           toggleFavourite: ToggleFavouriteUseCase(FakeFavouritesRepository()),
         ),
+        network: network.provider,
       ),
     );
     await tester.pump();

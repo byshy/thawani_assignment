@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:networking/networking.dart';
 
 import '../../../support/fakes.dart';
+import '../../../support/test_characters.dart';
 
 void main() {
   test('load sets the character from the use case', () async {
@@ -32,5 +33,28 @@ void main() {
     expect(provider.state.character, isNull);
     expect(provider.state.errorMessage, contains('internet'));
     provider.dispose();
+  });
+
+  test('reloads cached detail when connectivity returns', () async {
+    final network = FakeNetwork();
+    final repository = FakeCharacterRepository()
+      ..onGetCharacter = (id) async {
+        return testCharacterResult(fromCache: true);
+      };
+    final provider = CharacterDetailProvider(
+      getCharacter: GetCharacterUseCase(repository),
+      network: network.provider,
+    );
+
+    await provider.load(7);
+    expect(repository.detailCalls, [7]);
+
+    network.emit(false);
+    network.emit(true);
+    await Future<void>.delayed(Duration.zero);
+
+    expect(repository.detailCalls, [7, 7]);
+    provider.dispose();
+    await network.dispose();
   });
 }

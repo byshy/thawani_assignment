@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:thawani_models/thawani_models.dart';
 import 'package:thawani_ui/thawani_ui.dart';
 
+import '../../widgets/network_offline_banner.dart';
 import '../favourites/state/favourites_provider.dart';
 import 'state/character_detail_provider.dart';
 import 'widgets/character_fact.dart';
@@ -57,8 +58,10 @@ class CharacterDetailScreen extends StatelessWidget {
           ),
           body: Column(
             children: [
-              if (detail.state.fromCache && detail.state.fetchedAt != null)
-                OfflineBanner(fetchedAt: detail.state.fetchedAt!),
+              NetworkOfflineBanner(
+                fromCache: detail.state.fromCache,
+                fetchedAt: detail.state.fetchedAt,
+              ),
               Expanded(
                 child: ListView(
                   children: [

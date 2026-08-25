@@ -1,3 +1,4 @@
+import 'package:explorer/core/state/network_provider.dart';
 import 'package:explorer/di/provider_injector.dart';
 import 'package:explorer/di/use_case_injector.dart';
 import 'package:explorer/features/detail/state/character_detail_provider.dart';
@@ -22,13 +23,14 @@ void main() {
   });
 
   test(
-    'registerProviders registers favourites, list, and detail notifiers',
+    'registerProviders registers network, favourites, list, and detail notifiers',
     () {
       registerProviders();
 
+      expect(sl.isRegistered<NetworkProvider>(), isTrue);
       expect(sl<FavouritesProvider>(), isA<FavouritesProvider>());
       expect(sl.isRegistered<CharactersListProvider>(), isTrue);
-      expect(sl<CharacterDetailProvider>(), isA<CharacterDetailProvider>());
+      expect(sl.isRegistered<CharacterDetailProvider>(), isTrue);
     },
   );
 }

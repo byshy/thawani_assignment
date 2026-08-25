@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:thawani_ui/thawani_ui.dart';
 
 import '../../config/flavor_config.dart';
+import '../../widgets/network_offline_banner.dart';
 import 'state/characters_list_provider.dart';
 import 'widgets/characters_list_body.dart';
 
@@ -66,8 +67,10 @@ class _CharactersListScreenState extends State<CharactersListScreen> {
           ),
           body: Column(
             children: [
-              if (list.state.fromCache && list.state.fetchedAt != null)
-                OfflineBanner(fetchedAt: list.state.fetchedAt!),
+              NetworkOfflineBanner(
+                fromCache: list.state.fromCache,
+                fetchedAt: list.state.fetchedAt,
+              ),
               Expanded(child: CharactersListBody(list: list)),
             ],
           ),
