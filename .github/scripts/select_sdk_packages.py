@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Select SDK packages whose files changed for the current GitHub event."""
+"""Select SDK packages and Explorer whose files changed for the current GitHub event."""
 
 from __future__ import annotations
 
@@ -39,14 +39,26 @@ def changed_files(base: str, head: str) -> list[str]:
         return diff()
 
 
-def select_packages(
+def sdk_packages_for_changes(packages: list[str], changed: list[str]) -> list[str]:
+    return [
+        name
+        for name in packages
+        if any(path.startswith(f"sdk/{name}/") for path in changed)
+    ]
+
+
+def explorer_for_changes(run_all: bool, changed: list[str]) -> bool:
+    return run_all or any(path.startswith("apps/explorer/") for path in changed)
+
+
+def select_targets(
     packages: list[str],
     *,
     event: str,
     head: str,
     before: str,
     pr_base: str,
-) -> list[str]:
+) -> tuple[list[str], bool]:
     run_all = event == "workflow_dispatch" or (
         event == "push" and is_absent_sha(before)
     )
@@ -61,22 +73,17 @@ def select_packages(
             if any(path.startswith(".github/") for path in changed):
                 run_all = True
 
-    if run_all:
-        return packages
-
-    return [
-        name
-        for name in packages
-        if any(path.startswith(f"sdk/{name}/") for path in changed)
-    ]
+    selected = packages if run_all else sdk_packages_for_changes(packages, changed)
+    return selected, explorer_for_changes(run_all, changed)
 
 
-def write_outputs(selected: list[str]) -> None:
+def write_outputs(selected: list[str], explorer: bool) -> None:
     output_path = os.environ.get("GITHUB_OUTPUT")
     if output_path:
         with open(output_path, "a", encoding="utf-8") as fh:
             fh.write(f"packages={json.dumps(selected)}\n")
             fh.write(f"any={'true' if selected else 'false'}\n")
+            fh.write(f"explorer={'true' if explorer else 'false'}\n")
 
     summary = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary:
@@ -86,19 +93,22 @@ def write_outputs(selected: list[str]) -> None:
                 fh.writelines(f"- `{name}`\n" for name in selected)
             else:
                 fh.write("None — no SDK or workflow files changed.\n")
+            fh.write("\n## Explorer\n\n")
+            fh.write("Selected.\n" if explorer else "Skipped — app and workflow files unchanged.\n")
 
     print("Selected SDK packages:", ", ".join(selected) if selected else "(none)")
+    print("Explorer:", "yes" if explorer else "no")
 
 
 def main() -> None:
-    selected = select_packages(
+    selected, explorer = select_targets(
         discover_sdk_packages(),
         event=os.environ.get("EVENT_NAME", ""),
         head=os.environ.get("HEAD_SHA") or "HEAD",
         before=os.environ.get("EVENT_BEFORE") or "",
         pr_base=os.environ.get("PR_BASE_SHA") or "",
     )
-    write_outputs(selected)
+    write_outputs(selected, explorer)
 
 
 if __name__ == "__main__":

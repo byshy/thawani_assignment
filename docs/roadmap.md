@@ -39,7 +39,7 @@ Ordered implementation plan. Package behaviour lives in each package’s `README
 1. Repository tests (success + failure) — done.  
 2. Debounce and pagination tests — done.  
 3. Widget interaction test — done.  
-4. `flutter analyze` clean — SDK via CI; Explorer locally (CI follow-up).  
+4. `flutter analyze` clean — SDK and Explorer via CI.  
 5. Fill README: run steps per flavor, Flutter version, platforms, time, AI tools, assumptions, limitations — done.  
 
 ## Phase 5 — Optional
