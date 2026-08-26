@@ -11,4 +11,4 @@ Shared Flutter/Dart packages consumed by apps.
 | `local_storage/` | Local persistence (Hive) — **scaffolded** |
 | `needle/` | get_it re-export for DI — **scaffolded** |
 
-All SDK packages exist. Next: `apps/explorer`. Dependency rules: [../docs/monorepo.md](../docs/monorepo.md).
+All SDK packages exist. The assignment app is [`apps/explorer`](../apps/explorer/README.md). Dependency rules: [../docs/monorepo.md](../docs/monorepo.md).
