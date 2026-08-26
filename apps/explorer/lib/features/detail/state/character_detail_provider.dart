@@ -32,11 +32,11 @@ class CharacterDetailProvider extends ChangeNotifier {
   CharacterDetailState _state = const CharacterDetailState();
   CharacterDetailState get state => _state;
   int? _id;
-  var _disposed = false;
+  bool _disposed = false;
   StreamSubscription<EpisodesSnapshot>? _episodesSub;
   CancelToken? _episodeToken;
-  var _episodeHttpBase = 0;
-  var _mergeEpisodes = false;
+  int _episodeHttpBase = 0;
+  bool _mergeEpisodes = false;
   Set<int> _requestedEpisodeIds = const {};
 
   void _emit(CharacterDetailState next) {
@@ -56,13 +56,13 @@ class CharacterDetailProvider extends ChangeNotifier {
       ),
     );
 
-    final idsFromRoute = episodeIdsFromUrls(episodeUrls);
+    final List<int> idsFromRoute = episodeIdsFromUrls(episodeUrls);
     if (idsFromRoute.isNotEmpty) {
       _watchEpisodes(idsFromRoute, merge: false);
     }
 
     try {
-      final result = await _getCharacter(id);
+      final CharacterResult result = await _getCharacter(id);
       _emit(
         _state.copyWith(
           character: result.character,
@@ -72,9 +72,9 @@ class CharacterDetailProvider extends ChangeNotifier {
           clearErrorMessage: true,
         ),
       );
-      final ids = episodeIdsFromUrls(result.character.episodeUrls);
-      final alreadyStarted = idsFromRoute.isNotEmpty;
-      final sameIds =
+      final List<int> ids = episodeIdsFromUrls(result.character.episodeUrls);
+      final bool alreadyStarted = idsFromRoute.isNotEmpty;
+      final bool sameIds =
           ids.length == idsFromRoute.length &&
           ids.join(',') == idsFromRoute.join(',');
       if (ids.isNotEmpty && (!alreadyStarted || !sameIds)) {
@@ -94,7 +94,7 @@ class CharacterDetailProvider extends ChangeNotifier {
   }
 
   Future<void> retry() async {
-    final id = _id;
+    final int? id = _id;
     if (id == null) {
       return;
     }
@@ -102,7 +102,7 @@ class CharacterDetailProvider extends ChangeNotifier {
   }
 
   Future<void> retryMissingEpisodes() async {
-    final missing = _state.failedEpisodeIds.toList();
+    final List<int> missing = _state.failedEpisodeIds.toList();
     if (missing.isEmpty) {
       return;
     }
@@ -111,11 +111,11 @@ class CharacterDetailProvider extends ChangeNotifier {
 
   void _watchEpisodes(List<int> ids, {required bool merge}) {
     unawaited(_episodesSub?.cancel());
-    final previous = _episodeToken;
+    final CancelToken? previous = _episodeToken;
     if (previous != null && !previous.isCancelled) {
       previous.cancel();
     }
-    final token = CancelToken();
+    final CancelToken token = CancelToken();
     _episodeToken = token;
     _mergeEpisodes = merge;
     _requestedEpisodeIds = ids.toSet();
@@ -144,7 +144,7 @@ class CharacterDetailProvider extends ChangeNotifier {
     );
 
     _episodesSub = _getEpisodes(ids, cancelToken: token).listen(
-      (snapshot) => _onSnapshot(snapshot, token: token),
+      (EpisodesSnapshot snapshot) => _onSnapshot(snapshot, token: token),
       onError: (Object error, StackTrace _) {
         _onEpisodesError(error, token: token);
       },
@@ -155,12 +155,12 @@ class CharacterDetailProvider extends ChangeNotifier {
     if (_disposed || !identical(_episodeToken, token)) {
       return;
     }
-    final episodes = _mergeEpisodes
+    final List<Episode> episodes = _mergeEpisodes
         ? _merge(_state.episodes, snapshot.episodes)
         : snapshot.episodes;
-    final failed = _mergeEpisodes
+    final Set<int> failed = _mergeEpisodes
         ? {
-            for (final id in _state.failedEpisodeIds)
+            for (final int id in _state.failedEpisodeIds)
               if (!_requestedEpisodeIds.contains(id)) id,
             ...snapshot.failedIds,
           }
@@ -197,16 +197,18 @@ class CharacterDetailProvider extends ChangeNotifier {
   }
 
   List<Episode> _merge(List<Episode> current, List<Episode> incoming) {
-    final byId = {for (final episode in current) episode.id: episode};
-    for (final episode in incoming) {
+    final Map<int, Episode> byId = {
+      for (final Episode episode in current) episode.id: episode,
+    };
+    for (final Episode episode in incoming) {
       byId[episode.id] = episode;
     }
     return byId.values.toList();
   }
 
   void _onNetworkChanged() {
-    final status = _network!.state.status;
-    final id = _id;
+    final NetworkStatus status = _network!.state.status;
+    final int? id = _id;
     if (status == NetworkStatus.online &&
         _lastNetworkStatus == NetworkStatus.offline &&
         _state.fromCache &&
@@ -224,7 +226,7 @@ class CharacterDetailProvider extends ChangeNotifier {
   void dispose() {
     _disposed = true;
     unawaited(_episodesSub?.cancel());
-    final token = _episodeToken;
+    final CancelToken? token = _episodeToken;
     if (token != null && !token.isCancelled) {
       token.cancel();
     }
