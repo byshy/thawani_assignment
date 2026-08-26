@@ -15,6 +15,7 @@ Use **get_it** for dependency injection, exposed through a thin `sdk/needle` pac
 - `lib/main.dart` calls `await initSL()` before `runApp`. Flavor is resolved from `--dart-define=flavor=` (preferred) or `--flavor`.
 - Use cases resolve repositories via `sl<CharacterRepository>()`.
 - Providers resolve use cases via `sl<GetCharactersPageUseCase>()` (or receive them in the constructor at registration time).
+- **Always pass an explicit type argument** — `sl<Foo>()`, not bare `sl()`. Inference works for constructor args but fails when chaining (e.g. `sl<ConnectivityChecker>().isOnline`) and hides intent in injectors.
 - SDK packages define types and implementations; they do not register themselves — the app composition root does.
 
 ## Consequences

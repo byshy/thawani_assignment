@@ -60,7 +60,7 @@ Product/domain package for Explorer character data:
 - `CharacterRepository` / `FavouritesRepository` / `EpisodeRepository` interfaces and implementations.
 - Remote data sources (`/api/character` list, search, detail; `/api/episode/{ids}` batches) on top of `networking.ApiClient`.
 - Local data sources for list/detail cache + favourites via `local_storage` (`StorageBoxes`).
-- In-memory episode cache (does not survive restart).
+- Episode fan-out (bonus): `EpisodeRemoteDataSource` + `EpisodeRepositoryImpl`; helpers under `data/episodes/` — `EpisodeMemoryCache` (in-memory, does not survive restart), `EpisodeWatchState` (mutable watch progress), `ConcurrencyGate` (chunk concurrency cap).
 - Offline orchestration: network + cache write; failure/offline → cache hit; search HTTP `404` → empty page (not an error).
 - `NoCachedDataFailure` when offline with no cache.
 - Results carry `CacheMeta` (`fromCache` / `fetchedAt`) for the offline banner.
