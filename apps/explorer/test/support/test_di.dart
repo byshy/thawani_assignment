@@ -15,6 +15,7 @@ import 'fakes.dart';
 Future<void> registerTestDependencies({
   FakeCharacterRepository? characters,
   FakeFavouritesRepository? favourites,
+  FakeEpisodeRepository? episodes,
   NetworkProvider? network,
 }) async {
   await sl.reset();
@@ -24,6 +25,7 @@ Future<void> registerTestDependencies({
   sl.registerSingleton<FavouritesRepository>(
     favourites ?? FakeFavouritesRepository(),
   );
+  sl.registerSingleton<EpisodeRepository>(episodes ?? FakeEpisodeRepository());
   registerUseCases();
   sl.registerLazySingleton<NetworkProvider>(
     () =>
@@ -44,6 +46,10 @@ Future<void> registerTestDependencies({
     ),
   );
   sl.registerFactory<CharacterDetailProvider>(
-    () => CharacterDetailProvider(getCharacter: sl(), network: sl()),
+    () => CharacterDetailProvider(
+      getCharacter: sl(),
+      getEpisodes: sl(),
+      network: sl(),
+    ),
   );
 }

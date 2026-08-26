@@ -13,4 +13,10 @@ void registerRepositories() {
   sl.registerLazySingleton<FavouritesRepository>(
     () => FavouritesRepositoryImpl(sl()),
   );
+  sl.registerLazySingleton<EpisodeRepository>(
+    () => EpisodeRepositoryImpl(
+      remote: sl(),
+      isOnline: () => sl<ConnectivityChecker>().isOnline,
+    ),
+  );
 }

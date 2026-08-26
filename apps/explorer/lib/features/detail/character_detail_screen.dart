@@ -9,6 +9,7 @@ import '../../widgets/network_offline_banner.dart';
 import '../favourites/state/favourites_provider.dart';
 import 'state/character_detail_provider.dart';
 import 'widgets/character_fact.dart';
+import 'widgets/episode_section.dart';
 
 class CharacterDetailScreen extends StatelessWidget {
   const CharacterDetailScreen({super.key, required this.character});
@@ -96,6 +97,14 @@ class CharacterDetailScreen extends StatelessWidget {
                     CharacterFact(
                       label: 'Episodes',
                       value: '${character.episodeCount}',
+                    ),
+                    EpisodeSection(
+                      episodes: detail.state.episodes,
+                      loading: detail.state.episodesLoading,
+                      failedCount: detail.state.failedEpisodeIds.length,
+                      httpCalls: detail.state.episodeHttpCalls,
+                      errorMessage: detail.state.episodesErrorMessage,
+                      onRetryMissing: detail.retryMissingEpisodes,
                     ),
                   ],
                 ),

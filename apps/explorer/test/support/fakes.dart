@@ -77,6 +77,49 @@ class FakeCharacterRepository implements CharacterRepository {
   }
 }
 
+class FakeEpisodeRepository implements EpisodeRepository {
+  var watchCalls = 0;
+  final watchedIds = <List<int>>[];
+  Object? error;
+  Set<int> failedIds = {};
+  var httpCalls = 1;
+  Completer<void>? gate;
+  List<Episode> Function(List<int> ids)? onWatch;
+
+  @override
+  Stream<EpisodesSnapshot> watchEpisodes(
+    List<int> ids, {
+    CancelToken? cancelToken,
+  }) async* {
+    watchCalls++;
+    watchedIds.add(List<int>.of(ids));
+    final pending = gate;
+    if (pending != null) {
+      await pending.future;
+    }
+    if (cancelToken?.isCancelled ?? false) {
+      return;
+    }
+    if (error != null) {
+      throw error!;
+    }
+    final episodes =
+        onWatch?.call(ids) ?? [for (final id in ids) testEpisode(id: id)];
+    yield EpisodesSnapshot(
+      episodes: [
+        for (final episode in episodes)
+          if (!failedIds.contains(episode.id)) episode,
+      ],
+      failedIds: {
+        for (final id in ids)
+          if (failedIds.contains(id)) id,
+      },
+      inFlight: false,
+      httpCalls: httpCalls,
+    );
+  }
+}
+
 class FakeFavouritesRepository implements FavouritesRepository {
   final stored = <int, Character>{};
 

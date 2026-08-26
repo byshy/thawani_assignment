@@ -51,7 +51,8 @@ class AppRouter {
               ),
               ChangeNotifierProvider(
                 create: (_) =>
-                    sl<CharacterDetailProvider>()..load(character.id),
+                    sl<CharacterDetailProvider>()
+                      ..load(character.id, episodeUrls: character.episodeUrls),
               ),
             ],
             child: CharacterDetailScreen(character: character),

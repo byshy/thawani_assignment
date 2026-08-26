@@ -17,6 +17,10 @@ void registerProviders() {
     () => CharactersListProvider(getPage: sl(), network: sl()),
   );
   sl.registerFactory<CharacterDetailProvider>(
-    () => CharacterDetailProvider(getCharacter: sl(), network: sl()),
+    () => CharacterDetailProvider(
+      getCharacter: sl(),
+      getEpisodes: sl(),
+      network: sl(),
+    ),
   );
 }
