@@ -26,7 +26,7 @@ thawani_assignment/
 └── README.md
 ```
 
-All SDK packages exist. Explorer flavors and DI are wired; screens are still planned.
+All SDK packages exist. Explorer is implemented (flavors, DI, list / detail / favourites, offline).
 
 ## Package responsibilities
 

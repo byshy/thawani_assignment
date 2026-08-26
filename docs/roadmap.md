@@ -1,6 +1,6 @@
 # Implementation roadmap
 
-Ordered implementation plan. Documentation in this folder stays the source of truth for packages that do not exist yet.
+Ordered implementation plan. Package behaviour lives in each package’s `README.md` and in `docs/`.
 
 ## Phase 0 — Docs (done)
 
@@ -36,11 +36,11 @@ Ordered implementation plan. Documentation in this folder stays the source of tr
 
 ## Phase 4 — Quality
 
-1. Repository tests (success + failure).  
-2. Debounce and pagination tests.  
-3. Widget interaction test.  
-4. `flutter analyze` clean.  
-5. Fill README: run steps per flavor, Flutter version, platforms, time, AI tools, assumptions, limitations.  
+1. Repository tests (success + failure) — done.  
+2. Debounce and pagination tests — done.  
+3. Widget interaction test — done.  
+4. `flutter analyze` clean — SDK via CI; Explorer locally (CI follow-up).  
+5. Fill README: run steps per flavor, Flutter version, platforms, time, AI tools, assumptions, limitations — done.  
 
 ## Phase 5 — Optional
 

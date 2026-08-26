@@ -4,7 +4,7 @@ Thawani Flutter take-home: the **Explorer** app — a Rick and Morty character b
 
 This repo is a **multi-package monorepo**: runnable apps live under `apps/`, shared libraries under `sdk/`. Networking, storage, models, and UI live in the SDK; product apps stay thin shells that compose those packages. Another app can depend on `sdk/` instead of copying layers.
 
-> **Status:** SDK packages and Explorer presentation (list, detail, favourites) exist. Remaining: Phase 4 quality pass (README details, extra polish).
+> **Status:** Mandatory scope is implemented (list, search, detail, favourites, offline). Bonus episode fan-out is documented as Path 2 (design). Optional extras not shipped: Path 1 episode UI, persisted theme, screen recording.
 
 ---
 
@@ -39,7 +39,7 @@ See [docs/monorepo.md](docs/monorepo.md) for package responsibilities and depend
 | [docs/offline-and-caching.md](docs/offline-and-caching.md) | Cache, favourites, offline banner strategy |
 | [docs/testing-strategy.md](docs/testing-strategy.md) | Unit / widget tests planned against the brief |
 | [docs/episode-fanout.md](docs/episode-fanout.md) | Optional bonus: episode batching design (Path 2) |
-| [docs/roadmap.md](docs/roadmap.md) | Phased implementation order (when coding starts) |
+| [docs/roadmap.md](docs/roadmap.md) | Phased implementation order |
 | [docs/decisions/](docs/decisions/) | Architecture Decision Records (ADRs) |
 
 ---
@@ -47,14 +47,25 @@ See [docs/monorepo.md](docs/monorepo.md) for package responsibilities and depend
 ## How to run
 
 ```bash
-# From apps/explorer
+cd apps/explorer
 flutter pub get
+
 flutter run --flavor dev
 flutter run --flavor prod
 ```
 
-- **Flutter version:** TBD at scaffold time (pinned in docs and CI notes).
-- **Platforms tested:** TBD (Android and/or iOS — one is sufficient per brief).
+Both flavors use the public Rick and Morty API. They differ by app name, Android application id / iOS bundle id, launcher icon, splash colour, and the in-app environment label.
+
+```bash
+# From apps/explorer
+flutter analyze --fatal-warnings
+flutter test
+```
+
+SDK packages: `cd sdk/<package> && flutter analyze --fatal-warnings && flutter test`.
+
+- **Flutter version:** 3.41.6 (stable), Dart 3.11.4 — same pin as GitHub Actions.
+- **Platforms tested:** Android (`dev` and `prod` flavor builds). iOS schemes are wired; Android was the device-side check. Unit and widget tests run on the Flutter test harness.
 
 ---
 
@@ -80,28 +91,26 @@ Full detail: [docs/architecture.md](docs/architecture.md).
 
 ## Assumptions
 
-*Updated as ambiguities are resolved during implementation. Initial set:*
-
 1. Search with no matches (API `404`) is treated as an empty result set for that query, not a hard failure — user sees a named empty state.
 2. Favourites are keyed by character `id` and store enough fields to render list/detail offline without a network round-trip.
 3. “Cached and when it was fetched” on the offline banner uses the timestamp of the last successful list/detail write for the data currently shown.
-4. Infinite scroll triggers when the user approaches the bottom (threshold TBD, ~200–400 px), not only at exact end.
+4. Infinite scroll triggers when remaining scroll extent is under **400 px**, not only at the exact end.
 5. One product app (`explorer`) is enough for the submission; the monorepo exists to demonstrate multi-app readiness, not to ship a second app.
 
 ---
 
-## Known limitations / unfinished
+## Known limitations
 
-*To be updated honestly before submission.*
-
-- Implementation started: all SDK packages. Remaining: Explorer app scaffold and presentation.
-- Bonus episodes feature: design documented in [docs/episode-fanout.md](docs/episode-fanout.md); implementation optional.
+- Episode fan-out **Path 1** (live episode list on detail) is not implemented. The scored bonus is **Path 2**: [docs/episode-fanout.md](docs/episode-fanout.md).
+- No persisted light/dark theme (brief: pick at most one bonus).
+- GitHub Actions currently analyzes and tests **SDK packages** only. Explorer is run locally (`flutter analyze` / `flutter test` in `apps/explorer`).
+- Visual polish is not scored; clarity of layering is.
 
 ---
 
 ## Time spent
 
-*To be filled before submission.*
+Work spanned **24–26 August 2026** (docs, SDK packages, Explorer features, flavors, and tests).
 
 ---
 
@@ -109,7 +118,7 @@ Full detail: [docs/architecture.md](docs/architecture.md).
 
 | Tool | Used for |
 |------|----------|
-| Cursor (Composer) | Help drafting docs and (later) coding assistance under my direction |
+| Cursor | Help drafting docs and coding assistance under my direction |
 
 I only submit code I can explain line-by-line in interview.
 
@@ -117,4 +126,4 @@ I only submit code I can explain line-by-line in interview.
 
 ## Assignment brief
 
-See `Flutter Assignment.pdf` in the repo root for the official brief (Rick and Morty Explorer: list, search, detail, favourites, offline).
+Official brief: Rick and Morty Explorer (list, search, detail, favourites, offline). Mapping of that brief to this repo: [docs/assignment-scope.md](docs/assignment-scope.md).
