@@ -47,8 +47,8 @@ The repo is also split into `apps/` and `sdk/` packages so shared networking, st
 
 ### Domain contracts (`sdk/thawani` + `thawani_models`)
 
-- Stable types the UI can depend on: `Character`, pagination info, favourites, failure types.
-- Repository interfaces: `CharacterRepository` and `FavouritesRepository` (kept separate).
+- Stable types the UI can depend on: `Character`, `Episode`, pagination info, favourites, failure types.
+- Repository interfaces: `CharacterRepository`, `FavouritesRepository`, and `EpisodeRepository` (kept separate).
 - No Flutter UI imports in pure domain types where practical; Flutter is allowed in the `thawani` package only where feature helpers need it.
 
 ### Data (implementations)

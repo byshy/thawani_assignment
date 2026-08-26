@@ -93,7 +93,7 @@ Pick **at most one** if mandatory scope is solid:
 |--------|------|
 | Filter chips / sort | Only if time remains after mandatory + tests |
 | Light/dark + persisted theme | Good fit with `thawani_ui` + `local_storage` |
-| Episodes fan-out (hard) | Prefer **Path 2** design doc — already drafted as [episode-fanout.md](episode-fanout.md). Path 1 only if mandatory is rock solid |
+| Episodes fan-out (hard) | **Path 1 implemented** on character detail (batched multi-id fetch). Path 2 design remains in [episode-fanout.md](episode-fanout.md). Theme / filter-sort not shipped (at most one coded bonus). |
 
 ## Evaluation weights (for prioritisation)
 
@@ -120,7 +120,7 @@ Visual polish is **not** scored. Clarity of layering beats decoration.
 7. Offline banner + connectivity  
 8. Tests + analyze  
 9. README run instructions (per flavor), platforms, time, AI note  
-10. Optional: theme **or** episode design already done / partial Path 1  
+10. Optional: episode Path 1 (done) **or** theme — not both  
 
 ## Out of scope for this assignment
 

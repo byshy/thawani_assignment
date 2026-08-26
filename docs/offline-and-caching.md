@@ -17,7 +17,7 @@ Offline behaviour is a **core** requirement, not a bonus.
 | List/search cache | Pages (or flattened results) keyed by query + page, plus `fetchedAt` | Yes (Hive) |
 | Character detail cache | Full character by `id`, plus `fetchedAt` | Yes |
 | Favourites | Favourited characters (enough fields to render list/detail rows) | Yes |
-| In-memory episode cache | Only if bonus Path 1 is implemented | No by default (see episode doc) |
+| In-memory episode cache | Path 1 bonus — episode payloads by id | No (see episode doc) |
 
 Default persistence: **Hive CE** via `sdk/local_storage` (see [decisions/003-persistence.md](decisions/003-persistence.md)).
 

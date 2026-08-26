@@ -2,7 +2,7 @@
 
 Optional hard bonus from the brief. **Path 2** (design-only) is scored the same as a partial Path 1. This note answers the interview questions and records how we would implement the feature without melting the network.
 
-> Status: design complete for scoring Path 2. Path 1 implementation is optional and only after mandatory scope is solid.
+> Status: Path 2 design complete. Path 1 is implemented on character detail (batched fetch, in-memory cache, debug overlay).
 
 ## Feature
 
@@ -141,13 +141,16 @@ Persist `id → Episode` (and maybe `cachedAt`) in Hive via `local_storage`. Hyd
 ## Implementation sketch (if Path 1 later)
 
 ```text
+sdk/thawani_models/
+  entities/episode.dart  dto/episode_dto.dart  mappers/episode_mapper.dart
 sdk/thawani/
-  data/episodes/episode_remote_data_source.dart
-  data/episodes/episode_repository.dart
+  data/datasources/episode_remote_data_source.dart
   data/episodes/episode_memory_cache.dart
+  data/repositories/episode_repository_impl.dart
 apps/explorer/
-  features/detail/episode_section.dart
-  features/detail/episode_debug_overlay.dart
+  features/detail/widgets/episode_section.dart
+  features/detail/widgets/episode_debug_overlay.dart
+  features/detail/state/character_detail_provider.dart
 ```
 
 ## Deliberate non-goals

@@ -63,3 +63,7 @@ Avoid tests that only `expect(find.byType(ListView), findsOneWidget)` with no be
 - Removing debounce delay / ignore-stale → debounce test fails  
 - Duplicate page fetch or fetch past last page → pagination test fails  
 - Favourite tap no longer persists → widget test fails  
+
+### Bonus — episode fan-out (`sdk/thawani` + `apps/explorer`)
+
+Fake remote, not the live API. Cover: object vs list parse, chunk count (51 ids → 3 calls), single-flight, partial failure + retry, cancel.  

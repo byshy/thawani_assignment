@@ -44,9 +44,10 @@ Ordered implementation plan. Package behaviour lives in each package’s `README
 
 ## Phase 5 — Optional
 
-1. Keep episode Path 2 doc as bonus.  
-2. If time: persisted light/dark theme **or** Path 1 episodes — not both.  
-3. 2–3 minute screen recording including airplane-mode offline scenario.  
+1. Episode Path 2 design doc — done.  
+2. Episode Path 1 on character detail (batched fetch, in-memory cache, debug overlay) — done.  
+3. Persisted light/dark theme — not shipped (brief: at most one coded bonus).  
+4. 2–3 minute screen recording including airplane-mode offline scenario.  
 
 ## Interview prep checklist
 
