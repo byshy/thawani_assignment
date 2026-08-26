@@ -95,8 +95,9 @@ class CharacterDetailProvider extends ChangeNotifier {
     _id = id;
     _emit(
       _state.copyWith(
-        loading: _state.character == null || _state.character?.id != id,
-        clearErrorMessage: true,
+        characterLoading:
+            _state.character == null || _state.character?.id != id,
+        clearCharacterError: true,
       ),
     );
 
@@ -110,10 +111,10 @@ class CharacterDetailProvider extends ChangeNotifier {
       _emit(
         _state.copyWith(
           character: result.character,
-          fromCache: result.meta.fromCache,
-          fetchedAt: result.meta.fetchedAt,
-          loading: false,
-          clearErrorMessage: true,
+          characterFromCache: result.meta.fromCache,
+          characterFetchedAt: result.meta.fetchedAt,
+          characterLoading: false,
+          clearCharacterError: true,
         ),
       );
       final List<int> ids = episodeIdsFromUrls(result.character.episodeUrls);
@@ -126,15 +127,18 @@ class CharacterDetailProvider extends ChangeNotifier {
         _watchEpisodes(ids, merge: false);
       }
     } on CancelledFailure {
-      _emit(_state.copyWith(loading: false));
+      _emit(_state.copyWith(characterLoading: false));
     } catch (error) {
       if (_state.character == null) {
         _emit(
-          _state.copyWith(loading: false, errorMessage: failureMessage(error)),
+          _state.copyWith(
+            characterLoading: false,
+            characterErrorMessage: failureMessage(error),
+          ),
         );
       } else {
         // Keep the existing character (e.g. list snapshot / stale cache) visible.
-        _emit(_state.copyWith(loading: false));
+        _emit(_state.copyWith(characterLoading: false));
       }
     }
   }
@@ -267,7 +271,7 @@ class CharacterDetailProvider extends ChangeNotifier {
     final int? id = _id;
     if (status == NetworkStatus.online &&
         _lastNetworkStatus == NetworkStatus.offline &&
-        _state.fromCache &&
+        _state.characterFromCache &&
         id != null) {
       unawaited(
         load(id, episodeUrls: _state.character?.episodeUrls ?? const []),
