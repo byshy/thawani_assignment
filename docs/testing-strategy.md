@@ -53,6 +53,7 @@ Avoid tests that only `expect(find.byType(ListView), findsOneWidget)` with no be
 - `flutter_test`  
 - Mocking: register fakes on `GetIt sl` in test setup; hand-rolled fakes preferred for clarity; `mocktail` acceptable if readable  
 - Run per package: `flutter test` in `sdk/thawani` and `apps/explorer`  
+- CI runs `flutter analyze --fatal-warnings` and `flutter test` for changed SDK packages and for Explorer when `apps/explorer/` or `.github/` changes  
 - `flutter analyze` with zero warnings across packages — no `// ignore:` silencers  
 
 ## Definition of done for tests

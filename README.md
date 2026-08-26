@@ -103,7 +103,6 @@ Full detail: [docs/architecture.md](docs/architecture.md).
 
 - Episode fan-out **Path 1** (live episode list on detail) is not implemented. The scored bonus is **Path 2**: [docs/episode-fanout.md](docs/episode-fanout.md).
 - No persisted light/dark theme (brief: pick at most one bonus).
-- GitHub Actions currently analyzes and tests **SDK packages** only. Explorer is run locally (`flutter analyze` / `flutter test` in `apps/explorer`).
 - Visual polish is not scored; clarity of layering is.
 
 ---

@@ -1,5 +1,5 @@
-# Analyze and test SDK packages. Unchanged packages are skipped.
-# Changes under .github/ or a manual workflow_dispatch run every SDK.
+# Analyze and test changed SDK packages and Explorer.
+# Changes under .github/ or a manual workflow_dispatch run every SDK and Explorer.
 name: CI
 
 on:
@@ -17,17 +17,22 @@ concurrency:
 
 jobs:
   changes:
-    name: Detect changed SDKs
+    name: Detect changed packages
     runs-on: ubuntu-latest
     outputs:
       packages: ${{ steps.select.outputs.packages }}
       any: ${{ steps.select.outputs.any }}
+      explorer: ${{ steps.select.outputs.explorer }}
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: Select SDK packages
+      - name: Test change detection
+        working-directory: .github/scripts
+        run: python3 -m unittest -v
+
+      - name: Select packages
         id: select
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -69,9 +74,38 @@ jobs:
       - name: Test
         run: flutter test
 
+  explorer:
+    name: explorer
+    needs: changes
+    if: needs.changes.outputs.explorer == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: apps/explorer
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: "3.41.6"
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze --fatal-warnings
+
+      - name: Test
+        run: flutter test
+
   ci:
     name: CI
-    needs: [changes, analyze-and-test]
+    needs: [changes, analyze-and-test, explorer]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -81,12 +115,16 @@ jobs:
             echo "Change detection failed"
             exit 1
           fi
-          if [[ "${{ needs.changes.outputs.any }}" != "true" ]]; then
-            echo "No SDK package changes; skipped analyze and tests."
-            exit 0
-          fi
-          if [[ "${{ needs.analyze-and-test.result }}" != "success" ]]; then
-            echo "Analyze/test failed (${{ needs.analyze-and-test.result }})"
+          if [[ "${{ needs.changes.outputs.any }}" == "true" && "${{ needs.analyze-and-test.result }}" != "success" ]]; then
+            echo "SDK analyze/test failed (${{ needs.analyze-and-test.result }})"
             exit 1
           fi
-          echo "All selected SDK packages passed analyze and tests."
+          if [[ "${{ needs.changes.outputs.explorer }}" == "true" && "${{ needs.explorer.result }}" != "success" ]]; then
+            echo "Explorer analyze/test failed (${{ needs.explorer.result }})"
+            exit 1
+          fi
+          if [[ "${{ needs.changes.outputs.any }}" != "true" && "${{ needs.changes.outputs.explorer }}" != "true" ]]; then
+            echo "No SDK or Explorer changes; skipped analyze and tests."
+            exit 0
+          fi
+          echo "Selected packages passed analyze and tests."
