@@ -4,7 +4,7 @@ Thawani Flutter take-home: the **Explorer** app — a Rick and Morty character b
 
 This repo is a **multi-package monorepo**: runnable apps live under `apps/`, shared libraries under `sdk/`. Networking, storage, models, and UI live in the SDK; product apps stay thin shells that compose those packages. Another app can depend on `sdk/` instead of copying layers.
 
-> **Status:** Mandatory scope is implemented (list, search, detail, favourites, offline). Bonus episode fan-out is documented as Path 2 (design). Optional extras not shipped: Path 1 episode UI, persisted theme, screen recording.
+> **Status:** Mandatory scope is implemented (list, search, detail, favourites, offline). Bonus episode fan-out Path 1 is implemented on character detail (Path 2 design remains in docs). Optional extras not shipped: persisted theme, screen recording.
 
 ---
 
@@ -38,7 +38,7 @@ See [docs/monorepo.md](docs/monorepo.md) for package responsibilities and depend
 | [docs/assignment-scope.md](docs/assignment-scope.md) | Brief requirements mapped to planned work |
 | [docs/offline-and-caching.md](docs/offline-and-caching.md) | Cache, favourites, offline banner strategy |
 | [docs/testing-strategy.md](docs/testing-strategy.md) | Unit / widget tests planned against the brief |
-| [docs/episode-fanout.md](docs/episode-fanout.md) | Optional bonus: episode batching design (Path 2) |
+| [docs/episode-fanout.md](docs/episode-fanout.md) | Bonus: episode batching design (Path 2) + Path 1 notes |
 | [docs/roadmap.md](docs/roadmap.md) | Phased implementation order |
 | [docs/decisions/](docs/decisions/) | Architecture Decision Records (ADRs) |
 
@@ -101,9 +101,9 @@ Full detail: [docs/architecture.md](docs/architecture.md).
 
 ## Known limitations
 
-- Episode fan-out **Path 1** (live episode list on detail) is not implemented. The scored bonus is **Path 2**: [docs/episode-fanout.md](docs/episode-fanout.md).
-- No persisted light/dark theme (brief: pick at most one bonus).
+- No persisted light/dark theme (brief: pick at most one bonus; this repo implemented episode fan-out).
 - Visual polish is not scored; clarity of layering is.
+- Episode cache is in-memory only (does not survive process restart).
 
 ---
 

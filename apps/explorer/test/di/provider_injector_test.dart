@@ -15,6 +15,7 @@ void main() {
     await sl.reset();
     sl.registerSingleton<CharacterRepository>(FakeCharacterRepository());
     sl.registerSingleton<FavouritesRepository>(FakeFavouritesRepository());
+    sl.registerSingleton<EpisodeRepository>(FakeEpisodeRepository());
     registerUseCases();
   });
 

@@ -57,9 +57,10 @@ di/
 
 Product/domain package for Explorer character data:
 
-- `CharacterRepository` / `FavouritesRepository` interfaces and implementations.
-- Remote data source (`/api/character` list, search, detail) on top of `networking.ApiClient`.
+- `CharacterRepository` / `FavouritesRepository` / `EpisodeRepository` interfaces and implementations.
+- Remote data sources (`/api/character` list, search, detail; `/api/episode/{ids}` batches) on top of `networking.ApiClient`.
 - Local data sources for list/detail cache + favourites via `local_storage` (`StorageBoxes`).
+- In-memory episode cache (does not survive restart).
 - Offline orchestration: network + cache write; failure/offline → cache hit; search HTTP `404` → empty page (not an error).
 - `NoCachedDataFailure` when offline with no cache.
 - Results carry `CacheMeta` (`fromCache` / `fetchedAt`) for the offline banner.
@@ -70,10 +71,10 @@ In a multi-app Thawani setup, this package would grow with wallets, transfers, b
 
 ### `sdk/thawani_models`
 
-- Domain entities used by UI and domain (`Character`, pagination `PageInfo`, cache metadata).
-- API DTOs (`CharacterDto`, response wrappers) with `fromJson` / `toJson` (for cache) and **explicit** bidirectional mappers (`toEntity` / `toDto`).
+- Domain entities used by UI and domain (`Character`, `Episode`, pagination `PageInfo`, cache metadata).
+- API DTOs (`CharacterDto`, `EpisodeDto`, response wrappers) with `fromJson` / `toJson` (for cache) and **explicit** bidirectional mappers (`toEntity` / `toDto`).
 - Shared enums / value types (status, gender).
-- Episode types deferred until Path 1 bonus work (see [episode-fanout.md](episode-fanout.md)).
+- Episode by-id parser accepts a JSON object (one id) or a top-level array (several ids).
 
 **Rule:** widgets import models, never raw response maps.
 

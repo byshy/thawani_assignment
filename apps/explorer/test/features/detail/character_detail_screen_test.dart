@@ -2,6 +2,7 @@ import 'package:explorer/features/detail/state/character_detail_provider.dart';
 import 'package:explorer/features/detail/character_detail_screen.dart';
 import 'package:explorer/features/favourites/state/favourites_provider.dart';
 import 'package:explorer/use_cases/get_character_use_case.dart';
+import 'package:explorer/use_cases/get_episodes_use_case.dart';
 import 'package:explorer/use_cases/get_favourites_use_case.dart';
 import 'package:explorer/use_cases/toggle_favourite_use_case.dart';
 import 'package:flutter/material.dart';
@@ -31,14 +32,15 @@ void main() {
           ChangeNotifierProvider(
             create: (_) => CharacterDetailProvider(
               getCharacter: GetCharacterUseCase(FakeCharacterRepository()),
-            )..load(character.id),
+              getEpisodes: GetEpisodesUseCase(FakeEpisodeRepository()),
+            )..load(character.id, episodeUrls: character.episodeUrls),
           ),
         ],
         child: MaterialApp(home: CharacterDetailScreen(character: character)),
       ),
     );
     await tester.pump();
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     expect(find.text('Rick Sanchez'), findsWidgets);
     expect(find.text('Status'), findsOneWidget);
@@ -46,5 +48,7 @@ void main() {
     expect(find.text('Origin'), findsOneWidget);
     expect(find.text('Location'), findsOneWidget);
     expect(find.text('Episodes'), findsOneWidget);
+    expect(find.text('Pilot'), findsOneWidget);
+    expect(find.text('episode HTTP calls this screen: 1'), findsOneWidget);
   });
 }

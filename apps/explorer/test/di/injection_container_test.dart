@@ -37,6 +37,7 @@ void main() {
     expect(sl<ApiClient>().dio.options.baseUrl, config.baseUrl);
     expect(sl<CharacterRepository>(), isA<CharacterRepositoryImpl>());
     expect(sl<FavouritesRepository>(), isA<FavouritesRepositoryImpl>());
+    expect(sl<EpisodeRepository>(), isA<EpisodeRepositoryImpl>());
     expect(sl.isRegistered<ConnectivityChecker>(), isTrue);
     expect(sl.isRegistered<GetCharactersPageUseCase>(), isTrue);
     expect(sl.isRegistered<NetworkProvider>(), isTrue);

@@ -1,10 +1,15 @@
 export 'src/data/datasources/character_local_data_source.dart';
 export 'src/data/datasources/character_remote_data_source.dart';
+export 'src/data/datasources/episode_remote_data_source.dart';
 export 'src/data/datasources/favourites_local_data_source.dart';
+export 'src/data/episodes/episode_memory_cache.dart';
 export 'src/data/repositories/character_repository_impl.dart';
+export 'src/data/repositories/episode_repository_impl.dart';
 export 'src/data/repositories/favourites_repository_impl.dart';
 export 'src/data/storage_boxes.dart';
 export 'src/domain/character_repository.dart';
+export 'src/domain/episode_repository.dart';
+export 'src/domain/episodes_snapshot.dart';
 export 'src/domain/failures.dart';
 export 'src/domain/favourites_repository.dart';
 export 'src/domain/results.dart';

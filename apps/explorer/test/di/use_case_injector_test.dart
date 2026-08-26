@@ -1,6 +1,7 @@
 import 'package:explorer/di/use_case_injector.dart';
 import 'package:explorer/use_cases/get_character_use_case.dart';
 import 'package:explorer/use_cases/get_characters_page_use_case.dart';
+import 'package:explorer/use_cases/get_episodes_use_case.dart';
 import 'package:explorer/use_cases/get_favourites_use_case.dart';
 import 'package:explorer/use_cases/toggle_favourite_use_case.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,6 +15,7 @@ void main() {
     await sl.reset();
     sl.registerSingleton<CharacterRepository>(FakeCharacterRepository());
     sl.registerSingleton<FavouritesRepository>(FakeFavouritesRepository());
+    sl.registerSingleton<EpisodeRepository>(FakeEpisodeRepository());
   });
 
   tearDown(() async {
@@ -27,5 +29,6 @@ void main() {
     expect(sl<GetCharacterUseCase>(), isA<GetCharacterUseCase>());
     expect(sl<GetFavouritesUseCase>(), isA<GetFavouritesUseCase>());
     expect(sl<ToggleFavouriteUseCase>(), isA<ToggleFavouriteUseCase>());
+    expect(sl<GetEpisodesUseCase>(), isA<GetEpisodesUseCase>());
   });
 }

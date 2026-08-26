@@ -1,10 +1,26 @@
 import 'package:thawani_models/thawani_models.dart';
 import 'package:thawani/thawani.dart';
 
+Episode testEpisode({
+  int id = 1,
+  String name = 'Pilot',
+  String code = 'S01E01',
+  String airDate = 'December 2, 2013',
+}) {
+  return Episode(
+    id: id,
+    name: name,
+    airDate: airDate,
+    code: code,
+    url: 'https://example.com/api/episode/$id',
+  );
+}
+
 Character testCharacter({
   int id = 1,
   String name = 'Rick Sanchez',
   String species = 'Human',
+  List<String> episodeUrls = const ['https://example.com/api/episode/1'],
 }) {
   return Character(
     id: id,
@@ -16,7 +32,7 @@ Character testCharacter({
     origin: const CharacterLocation(name: 'Earth', url: ''),
     location: const CharacterLocation(name: 'Citadel', url: ''),
     image: '',
-    episodeUrls: const ['https://example.com/api/episode/1'],
+    episodeUrls: episodeUrls,
   );
 }
 

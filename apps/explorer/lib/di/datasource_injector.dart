@@ -11,4 +11,7 @@ void registerDataSources() {
   sl.registerLazySingleton<FavouritesLocalDataSource>(
     () => FavouritesLocalDataSource(sl()),
   );
+  sl.registerLazySingleton<EpisodeRemoteDataSource>(
+    () => EpisodeRemoteDataSourceImpl(sl()),
+  );
 }
