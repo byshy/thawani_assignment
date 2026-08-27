@@ -9,11 +9,13 @@ import 'package:thawani_models/thawani_models.dart';
 import 'test_characters.dart';
 
 class FakeNetwork {
-  FakeNetwork({bool online = true})
+  FakeNetwork({bool online = true, NetworkStatus? initialStatus})
     : controller = StreamController<bool>.broadcast(sync: true) {
     provider = NetworkProvider(
       onStatusChanged: controller.stream,
-      initialStatus: online ? NetworkStatus.online : NetworkStatus.offline,
+      initialStatus:
+          initialStatus ??
+          (online ? NetworkStatus.online : NetworkStatus.offline),
     );
   }
 

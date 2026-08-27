@@ -228,7 +228,7 @@ class CharactersListProvider extends ChangeNotifier {
   void _onNetworkChanged() {
     final status = _network!.state.status;
     if (status == NetworkStatus.online &&
-        _lastNetworkStatus == NetworkStatus.offline &&
+        _lastNetworkStatus != NetworkStatus.online &&
         _state.fromCache) {
       unawaited(refresh(clear: false));
     }

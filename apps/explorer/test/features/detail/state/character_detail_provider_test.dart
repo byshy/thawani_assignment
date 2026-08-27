@@ -1,3 +1,4 @@
+import 'package:explorer/core/state/network_state.dart';
 import 'package:explorer/features/detail/state/character_detail_provider.dart';
 import 'package:explorer/use_cases/get_character_use_case.dart';
 import 'package:explorer/use_cases/get_episodes_use_case.dart';
@@ -58,6 +59,25 @@ void main() {
     expect(repository.detailCalls, [7]);
 
     network.emit(false);
+    network.emit(true);
+    await Future<void>.delayed(Duration.zero);
+
+    expect(repository.detailCalls, [7, 7]);
+    provider.dispose();
+    await network.dispose();
+  });
+
+  test('reloads cached detail when connectivity is first resolved', () async {
+    final network = FakeNetwork(initialStatus: NetworkStatus.unknown);
+    final repository = FakeCharacterRepository()
+      ..onGetCharacter = (id) async {
+        return testCharacterResult(fromCache: true);
+      };
+    final provider = buildProvider(characters: repository, network: network);
+
+    await provider.load(7);
+    expect(repository.detailCalls, [7]);
+
     network.emit(true);
     await Future<void>.delayed(Duration.zero);
 

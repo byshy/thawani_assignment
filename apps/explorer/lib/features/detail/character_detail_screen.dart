@@ -58,11 +58,8 @@ class CharacterDetailScreen extends StatelessWidget {
             ],
           ),
           body: Column(
-            children: [
-              NetworkOfflineBanner(
-                fromCache: detail.state.characterFromCache,
-                fetchedAt: detail.state.characterFetchedAt,
-              ),
+              children: [
+              NetworkOfflineBanner(fetchedAt: detail.state.characterFetchedAt),
               Expanded(
                 child: ListView(
                   children: [

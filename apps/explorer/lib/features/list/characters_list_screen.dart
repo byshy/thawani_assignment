@@ -67,10 +67,7 @@ class _CharactersListScreenState extends State<CharactersListScreen> {
           ),
           body: Column(
             children: [
-              NetworkOfflineBanner(
-                fromCache: list.state.fromCache,
-                fetchedAt: list.state.fetchedAt,
-              ),
+              NetworkOfflineBanner(fetchedAt: list.state.fetchedAt),
               Expanded(child: CharactersListBody(list: list)),
             ],
           ),

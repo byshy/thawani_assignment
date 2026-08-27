@@ -43,6 +43,7 @@ class CharactersListBody extends StatelessWidget {
             return false;
           },
           child: ListView.builder(
+            padding: const EdgeInsets.only(bottom: ThawaniSpacing.lg),
             physics: const AlwaysScrollableScrollPhysics(),
             itemCount:
                 state.characters.length +
