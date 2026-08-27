@@ -29,8 +29,8 @@ void main() {
     await provider.load(7);
 
     expect(provider.state.character?.id, 7);
-    expect(provider.state.loading, isFalse);
-    expect(provider.state.errorMessage, isNull);
+    expect(provider.state.characterLoading, isFalse);
+    expect(provider.state.characterErrorMessage, isNull);
     provider.dispose();
   });
 
@@ -42,7 +42,7 @@ void main() {
     await provider.load(7);
 
     expect(provider.state.character, isNull);
-    expect(provider.state.errorMessage, contains('internet'));
+    expect(provider.state.characterErrorMessage, contains('internet'));
     provider.dispose();
   });
 

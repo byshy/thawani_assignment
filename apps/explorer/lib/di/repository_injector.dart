@@ -5,17 +5,17 @@ import 'package:thawani/thawani.dart';
 void registerRepositories() {
   sl.registerLazySingleton<CharacterRepository>(
     () => CharacterRepositoryImpl(
-      remote: sl(),
-      local: sl(),
+      remote: sl<CharacterRemoteDataSource>(),
+      local: sl<CharacterLocalDataSource>(),
       isOnline: () => sl<ConnectivityChecker>().isOnline,
     ),
   );
   sl.registerLazySingleton<FavouritesRepository>(
-    () => FavouritesRepositoryImpl(sl()),
+    () => FavouritesRepositoryImpl(sl<FavouritesLocalDataSource>()),
   );
   sl.registerLazySingleton<EpisodeRepository>(
     () => EpisodeRepositoryImpl(
-      remote: sl(),
+      remote: sl<EpisodeRemoteDataSource>(),
       isOnline: () => sl<ConnectivityChecker>().isOnline,
     ),
   );
