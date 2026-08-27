@@ -3,10 +3,10 @@ import 'package:thawani_models/thawani_models.dart';
 class CharacterDetailState {
   const CharacterDetailState({
     this.character,
-    this.loading = false,
-    this.errorMessage,
-    this.fromCache = false,
-    this.fetchedAt,
+    this.characterLoading = false,
+    this.characterErrorMessage,
+    this.characterFromCache = false,
+    this.characterFetchedAt,
     this.episodes = const [],
     this.episodesLoading = false,
     this.failedEpisodeIds = const {},
@@ -15,10 +15,11 @@ class CharacterDetailState {
   });
 
   final Character? character;
-  final bool loading;
-  final String? errorMessage;
-  final bool fromCache;
-  final DateTime? fetchedAt;
+  final bool characterLoading;
+  final String? characterErrorMessage;
+  final bool characterFromCache;
+  final DateTime? characterFetchedAt;
+
   final List<Episode> episodes;
   final bool episodesLoading;
   final Set<int> failedEpisodeIds;
@@ -27,11 +28,11 @@ class CharacterDetailState {
 
   CharacterDetailState copyWith({
     Character? character,
-    bool? loading,
-    String? errorMessage,
-    bool clearErrorMessage = false,
-    bool? fromCache,
-    DateTime? fetchedAt,
+    bool? characterLoading,
+    String? characterErrorMessage,
+    bool clearCharacterError = false,
+    bool? characterFromCache,
+    DateTime? characterFetchedAt,
     List<Episode>? episodes,
     bool? episodesLoading,
     Set<int>? failedEpisodeIds,
@@ -41,12 +42,12 @@ class CharacterDetailState {
   }) {
     return CharacterDetailState(
       character: character ?? this.character,
-      loading: loading ?? this.loading,
-      errorMessage: clearErrorMessage
+      characterLoading: characterLoading ?? this.characterLoading,
+      characterErrorMessage: clearCharacterError
           ? null
-          : (errorMessage ?? this.errorMessage),
-      fromCache: fromCache ?? this.fromCache,
-      fetchedAt: fetchedAt ?? this.fetchedAt,
+          : (characterErrorMessage ?? this.characterErrorMessage),
+      characterFromCache: characterFromCache ?? this.characterFromCache,
+      characterFetchedAt: characterFetchedAt ?? this.characterFetchedAt,
       episodes: episodes ?? this.episodes,
       episodesLoading: episodesLoading ?? this.episodesLoading,
       failedEpisodeIds: failedEpisodeIds ?? this.failedEpisodeIds,

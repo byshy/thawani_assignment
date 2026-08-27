@@ -23,19 +23,19 @@ class CharacterDetailScreen extends StatelessWidget {
       builder: (context, detail, _) {
         final character = detail.state.character ?? this.character;
 
-        if (detail.state.loading && detail.state.character == null) {
+        if (detail.state.characterLoading && detail.state.character == null) {
           return Scaffold(
             appBar: AppBar(title: Text(this.character.name)),
             body: const LoadingIndicator(),
           );
         }
 
-        if (detail.state.errorMessage != null &&
+        if (detail.state.characterErrorMessage != null &&
             detail.state.character == null) {
           return Scaffold(
             appBar: AppBar(title: const Text('Character')),
             body: ErrorState(
-              message: detail.state.errorMessage!,
+              message: detail.state.characterErrorMessage!,
               onRetry: detail.retry,
             ),
           );
@@ -58,8 +58,8 @@ class CharacterDetailScreen extends StatelessWidget {
             ],
           ),
           body: Column(
-            children: [
-              NetworkOfflineBanner(fetchedAt: detail.state.fetchedAt),
+              children: [
+              NetworkOfflineBanner(fetchedAt: detail.state.characterFetchedAt),
               Expanded(
                 child: ListView(
                   children: [
@@ -71,7 +71,8 @@ class CharacterDetailScreen extends StatelessWidget {
                         fit: BoxFit.cover,
                         errorBuilder: (_, _, _) => const SizedBox(height: 24),
                       ),
-                    if (detail.state.loading) const LinearProgressIndicator(),
+                    if (detail.state.characterLoading)
+                      const LinearProgressIndicator(),
                     CharacterFact(
                       label: 'Status',
                       value: character.status.toApi(),

@@ -67,9 +67,11 @@ I am not chasing the maximum possible batch.
 | Piece | Responsibility |
 |-------|----------------|
 | `EpisodeRemoteDataSource` | `fetchByIds(List<int> ids)` — one HTTP call; parse object-or-list |
-| `EpisodeCache` | In-memory map `id → Episode`; optional Hive later |
-| `EpisodeRepository` | Dedupe ids, split cache hits/misses, chunk misses, single-flight, concurrency cap |
-| Detail Provider | Requests episodes for character; cancels on dispose; exposes partial + retry |
+| `EpisodeMemoryCache` | In-memory map `id → Episode`; optional Hive later |
+| `EpisodeWatchState` | Mutable progress for one watch (arrived / failed / httpCalls → snapshot) |
+| `ConcurrencyGate` | Caps concurrent chunk fetches |
+| `EpisodeRepositoryImpl` | Dedupe ids, split cache hits/misses, chunk misses, single-flight, concurrency cap |
+| `CharacterDetailProvider` | Requests episodes for character; cancels on dispose; exposes partial + retry |
 
 ### Algorithm (open character with N episode URLs)
 
@@ -138,7 +140,7 @@ Persist `id → Episode` (and maybe `cachedAt`) in Hive via `local_storage`. Hyd
 - No aggressive rate limit on this API, but runaway loops are a finding — guards on pagination/single-flight apply here too.  
 - Prefer Path 2 documentation over a half-broken Path 1.
 
-## Implementation sketch (if Path 1 later)
+## Implementation sketch (Path 1 — as shipped)
 
 ```text
 sdk/thawani_models/
@@ -146,11 +148,14 @@ sdk/thawani_models/
 sdk/thawani/
   data/datasources/episode_remote_data_source.dart
   data/episodes/episode_memory_cache.dart
+  data/episodes/episode_watch_state.dart
+  data/episodes/concurrency_gate.dart
   data/repositories/episode_repository_impl.dart
 apps/explorer/
   features/detail/widgets/episode_section.dart
   features/detail/widgets/episode_debug_overlay.dart
   features/detail/state/character_detail_provider.dart
+  features/detail/state/character_detail_state.dart
 ```
 
 ## Deliberate non-goals

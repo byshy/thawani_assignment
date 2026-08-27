@@ -1,17 +1,19 @@
+import 'package:local_storage/local_storage.dart';
 import 'package:needle/needle.dart';
+import 'package:networking/networking.dart';
 import 'package:thawani/thawani.dart';
 
 void registerDataSources() {
   sl.registerLazySingleton<CharacterRemoteDataSource>(
-    () => CharacterRemoteDataSource(sl()),
+    () => CharacterRemoteDataSource(sl<ApiClient>()),
   );
   sl.registerLazySingleton<CharacterLocalDataSource>(
-    () => CharacterLocalDataSource(sl()),
+    () => CharacterLocalDataSource(sl<LocalStorage>()),
   );
   sl.registerLazySingleton<FavouritesLocalDataSource>(
-    () => FavouritesLocalDataSource(sl()),
+    () => FavouritesLocalDataSource(sl<LocalStorage>()),
   );
   sl.registerLazySingleton<EpisodeRemoteDataSource>(
-    () => EpisodeRemoteDataSourceImpl(sl()),
+    () => EpisodeRemoteDataSourceImpl(sl<ApiClient>()),
   );
 }

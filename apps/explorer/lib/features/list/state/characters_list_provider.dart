@@ -10,6 +10,38 @@ import '../../../core/state/network_state.dart';
 import '../../../use_cases/get_characters_page_use_case.dart';
 import 'characters_list_state.dart';
 
+/// Owns the characters list / search screen state.
+///
+/// ## Typical flows
+///
+/// **First open:** router calls [loadInitialIfNeeded] once → [refresh] → page 1.
+///
+/// **Search typing:** [onQueryChanged] updates [CharactersListState.query]
+/// immediately and schedules a debounced [refresh] so keystrokes do not each
+/// hit the network.
+///
+/// **Submit / explicit search:** [search] cancels the debounce and refreshes
+/// immediately with the given query.
+///
+/// **Infinite scroll:** [loadNextPage] appends page `_page + 1` when
+/// [CharactersListState.hasMore] and nothing is already in flight.
+///
+/// **Pull / retry:** [refresh] / [retry] reset to page 1.
+///
+/// ## Stale-response guards
+///
+/// - [_epoch] increments on every [_load]. When a response returns, it is
+///   ignored if a newer load has started (new search or refresh).
+/// - Responses are also ignored if [CharactersListState.query] changed while
+///   the request was in flight.
+/// - [_inFlight] blocks overlapping pagination; a [reset] load may still start
+///   and supersede via [_epoch].
+///
+/// ## Connectivity
+///
+/// If the list is showing cached data and we go offline → online,
+/// [refresh] runs with `clear: false` so existing rows stay visible while
+/// page 1 reloads.
 class CharactersListProvider extends ChangeNotifier {
   CharactersListProvider({
     required GetCharactersPageUseCase getPage,
@@ -30,9 +62,16 @@ class CharactersListProvider extends ChangeNotifier {
   CharactersListState _state = const CharactersListState();
   CharactersListState get state => _state;
 
+  /// Last successfully applied page number (`0` = none yet).
   int _page = 0;
+
+  /// True while a [_load] request is awaiting its use-case result.
   bool _inFlight = false;
+
+  /// Bumped on each [_load]; outdated responses bail out when it no longer matches.
   int _epoch = 0;
+
+  /// Ensures [loadInitialIfNeeded] only kicks off the first fetch once.
   bool _started = false;
 
   void _emit(CharactersListState next) {
@@ -40,6 +79,7 @@ class CharactersListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Updates the search box text and debounces a network [refresh].
   void onQueryChanged(String value) {
     if (value == _state.query) {
       return;
@@ -48,6 +88,7 @@ class CharactersListProvider extends ChangeNotifier {
     _debouncer.run(() => unawaited(refresh()));
   }
 
+  /// Applies [query] immediately (no debounce) and reloads page 1.
   Future<void> search(String query) {
     _debouncer.cancel();
     if (query != _state.query) {
@@ -56,6 +97,7 @@ class CharactersListProvider extends ChangeNotifier {
     return refresh();
   }
 
+  /// First-entry load used by the shell/router; no-ops after the first call.
   Future<void> loadInitialIfNeeded() async {
     if (_started) {
       return;
@@ -64,13 +106,20 @@ class CharactersListProvider extends ChangeNotifier {
     await refresh();
   }
 
+  /// Alias for [refresh] after a full-list error.
   Future<void> retry() => refresh();
 
+  /// Reloads page 1 for the current query.
+  ///
+  /// When [clear] is true (default), the list is emptied and status goes to
+  /// [CharactersListStatus.initialLoading]. When false, existing rows stay
+  /// on screen (soft refresh after reconnect).
   Future<void> refresh({bool clear = true}) {
     _started = true;
     return _load(reset: true, clear: clear);
   }
 
+  /// Fetches the next page when more data exists and nothing is loading.
   Future<void> loadNextPage() async {
     if (!state.hasMore ||
         _inFlight ||
@@ -81,6 +130,11 @@ class CharactersListProvider extends ChangeNotifier {
     await _load(reset: false, clear: false);
   }
 
+  /// Shared fetch path for page-1 reset and append-next-page.
+  ///
+  /// [reset] true → page 1 (replace or soft-refresh).  
+  /// [reset] false → append `_page + 1`.  
+  /// [clear] only matters on reset: wipe rows vs keep them while reloading.
   Future<void> _load({required bool reset, required bool clear}) async {
     if (!reset && _inFlight) {
       return;
@@ -119,6 +173,7 @@ class CharactersListProvider extends ChangeNotifier {
 
     try {
       final result = await _getPage(query: requestedQuery, page: requestedPage);
+      // Drop stale results from an older search/refresh or a superseded page.
       if (epoch != _epoch || requestedQuery != _state.query) {
         return;
       }
@@ -154,6 +209,7 @@ class CharactersListProvider extends ChangeNotifier {
           ),
         );
       } else if (!reset) {
+        // Keep existing rows; surface a footer/pagination error only.
         _emit(
           _state.copyWith(
             loadingMore: false,
@@ -168,6 +224,7 @@ class CharactersListProvider extends ChangeNotifier {
     }
   }
 
+  /// Soft-refreshes when coming back online after showing cached list data.
   void _onNetworkChanged() {
     final status = _network!.state.status;
     if (status == NetworkStatus.online &&
