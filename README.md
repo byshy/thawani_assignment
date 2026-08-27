@@ -4,7 +4,15 @@ Thawani Flutter take-home: the **Explorer** app — a Rick and Morty character b
 
 This repo is a **multi-package monorepo**: runnable apps live under `apps/`, shared libraries under `sdk/`. Networking, storage, models, and UI live in the SDK; product apps stay thin shells that compose those packages. Another app can depend on `sdk/` instead of copying layers.
 
-> **Status:** Mandatory scope is implemented (list, search, detail, favourites, offline). Bonus episode fan-out Path 1 is implemented on character detail (Path 2 design remains in docs). Optional extras not shipped: persisted theme, screen recording.
+> **Status:** Mandatory scope is implemented (list, search, detail, favourites, offline). Bonus episode fan-out Path 1 is implemented on character detail (Path 2 design remains in docs). Optional extra not shipped: persisted theme.
+
+---
+
+## Screen recording
+
+Walkthrough of Explorer — list, search, detail, favourites, and airplane-mode offline:
+
+**[Watch on YouTube](https://youtube.com/shorts/mMX2ulmdADI)** (unlisted)
 
 ---
 
