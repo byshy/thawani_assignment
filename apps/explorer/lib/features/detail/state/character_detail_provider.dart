@@ -208,7 +208,7 @@ class CharacterDetailProvider extends ChangeNotifier {
     final status = _network!.state.status;
     final id = _id;
     if (status == NetworkStatus.online &&
-        _lastNetworkStatus == NetworkStatus.offline &&
+        _lastNetworkStatus != NetworkStatus.online &&
         _state.fromCache &&
         id != null) {
       unawaited(

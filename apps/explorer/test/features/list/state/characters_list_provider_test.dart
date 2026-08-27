@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:explorer/core/state/network_state.dart';
 import 'package:explorer/features/list/state/characters_list_provider.dart';
 import 'package:explorer/features/list/state/characters_list_state.dart';
 import 'package:explorer/use_cases/get_characters_page_use_case.dart';
@@ -147,6 +148,29 @@ void main() {
     expect(repo.pageCalls, hasLength(1));
 
     network.emit(false);
+    network.emit(true);
+    await Future<void>.delayed(Duration.zero);
+
+    expect(repo.pageCalls, hasLength(2));
+    list.dispose();
+    await network.dispose();
+  });
+
+  test('refreshes cached data when connectivity is first resolved', () async {
+    final network = FakeNetwork(initialStatus: NetworkStatus.unknown);
+    final repo = FakeCharacterRepository()
+      ..onGetPage = (query, page) async {
+        return testPageResult(fromCache: true);
+      };
+    final list = CharactersListProvider(
+      getPage: GetCharactersPageUseCase(repo),
+      network: network.provider,
+      searchDebouncer: Debouncer(delay: Duration.zero),
+    );
+
+    await list.refresh();
+    expect(repo.pageCalls, hasLength(1));
+
     network.emit(true);
     await Future<void>.delayed(Duration.zero);
 
